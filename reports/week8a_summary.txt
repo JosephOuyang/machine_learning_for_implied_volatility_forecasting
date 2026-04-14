@@ -1,0 +1,62 @@
+WEEK 8a SUMMARY — OptionMetrics Real Data: 10 Stocks American, 2024
+
+Goal:
+Build the American equity options dataset from OptionMetrics for training an MLP.
+This transitions the project from synthetic Black-Scholes data to observed
+market prices, focusing on the early exercise premium as the key learning signal.
+
+Data Sources:
+- Option prices:       optionm.opprcd
+- Underlying prices:   optionm.secprd
+- Risk-free rates:     optionm.zerocd (zero curve, interpolated per row)
+- Exercise style:      optionm.opinfd (confirmed all American for equity tickers)
+- Security lookup:     optionm.securd
+
+Tickers: AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA, AMD, AVGO, NFLX
+Date range: 2024-01-02 to 2024-12-31
+
+Why bs_price is included as a feature:
+- American mid_price is always >= Black-Scholes European price.
+- The gap is the early exercise premium — structured and learnable.
+- bs_price gives the MLP a theoretical lower bound anchor.
+- The MLP learns the correction (early exercise premium) on top.
+- Professor motivation: American options are more expensive than European options.
+
+Dataset Construction:
+- Pulled exercise style from opinfd and merged on secid.
+  Confirmed: all 10 equity tickers have exercise_style = 'A' (American).
+- Merged option prices with underlying close prices on secid + date.
+- Interpolated risk-free rate from zero curve (linear interpolation).
+- Computed: tau, moneyness, mid_price, strike (divided by 1000), bs_price.
+- Note: strike_price in opprcd is stored as actual_strike * 1000 (IvyDB convention).
+- Note: impl_volatility is CRR-based for American options in OptionMetrics.
+  Using it in the BS formula is a standard approximation.
+
+Filtering:
+  drop_non_american: 0 rows removed
+  drop_iv_sentinel: 0 rows removed
+  drop_short_tau: 114,411 rows removed
+  drop_long_tau: 1,127,355 rows removed
+  drop_moneyness: 1,819,990 rows removed
+  drop_zero_volume: 178,049 rows removed
+  drop_low_oi: 190,437 rows removed
+  drop_zero_mid: 0 rows removed
+  drop_wide_spread: 15,790 rows removed
+  drop_missing_r_or_bs: 0 rows removed
+  Rows before: 4,088,646
+  Rows after:  642,614
+
+Final Dataset:
+- Shape: (642614, 16)
+- Features: moneyness, tau, r, impl_volatility, bs_price
+- Label:    mid_price (observed American call option price)
+
+Artifacts:
+- Final dataset CSV:         runs/week8a_optionmetrics_10stocks_american_2024/20260410-023632/options_10stocks_american_2024.csv
+- Feature distributions:     runs/week8a_optionmetrics_10stocks_american_2024/20260410-023632/figures/week8a_feature_distributions.png
+- Rows per ticker bar chart: runs/week8a_optionmetrics_10stocks_american_2024/20260410-023632/figures/week8a_rows_per_ticker.png
+- Per-ticker stats CSV:      runs/week8a_optionmetrics_10stocks_american_2024/20260410-023632/week8a_ticker_stats.csv
+
+Next step:
+Week 9 — train PaperMLP on both Week 8a (American) and Week 8b (SPX European)
+datasets, compare test MSE, scatter predicted vs actual.

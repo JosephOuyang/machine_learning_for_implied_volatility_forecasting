@@ -1,0 +1,53 @@
+WEEK 8b SUMMARY — OptionMetrics Real Data: SPX European Options, 2024
+
+Goal:
+Build the SPX European options dataset from OptionMetrics as the second
+pathway for MLP training. Contrast with Week 8a American equity options.
+
+Data Sources:
+- Option prices:       optionm.opprcd
+- Underlying prices:   optionm.secprd
+- Risk-free rates:     optionm.zerocd (zero curve, interpolated per row)
+- Exercise style:      optionm.opinfd (confirmed European for SPX)
+
+Underlying: SPX (secid = 108105)
+Date range: 2024-01-02 to 2024-12-31
+
+Why bs_price is NOT included (contrast with Week 8a):
+- OptionMetrics computes SPX impl_vol by inverting Black-Scholes directly.
+- Therefore BS_price(moneyness, tau, r, impl_vol) ≈ mid_price for SPX.
+- Adding bs_price would duplicate the label — data leakage, no signal.
+- In Week 8a (American), mid_price > bs_price by the early exercise premium.
+  That gap is real and learnable, so bs_price is a genuine feature there.
+
+Filtering:
+  drop_non_european: 0 rows removed
+  drop_iv_sentinel: 0 rows removed
+  drop_short_tau: 137,575 rows removed
+  drop_long_tau: 196,731 rows removed
+  drop_moneyness: 446,759 rows removed
+  drop_zero_volume: 1,044,510 rows removed
+  drop_low_oi: 250,451 rows removed
+  drop_zero_mid: 0 rows removed
+  drop_wide_spread: 11,663 rows removed
+  drop_missing_r: 0 rows removed
+  Rows before: 2,409,057
+  Rows after:  321,368
+
+Final Dataset:
+- Shape: (321368, 14)
+- Features: moneyness, tau, r, impl_volatility
+- Label:    mid_price (observed SPX European call price)
+
+Pathway Comparison Summary:
+  Week 8a — American equity  | features: moneyness, tau, r, impl_vol, bs_price | rows: 642,614
+  Week 8b — European SPX     | features: moneyness, tau, r, impl_vol            | rows: 321,368
+
+Artifacts:
+- SPX dataset CSV:               runs/week8b_optionmetrics_spx_european_2024/20260410-024302/options_spx_european_2024.csv
+- SPX feature distributions:     runs/week8b_optionmetrics_spx_european_2024/20260410-024302/figures/week8b_spx_feature_distributions.png
+- SPX vs equity comparison plot: runs/week8b_optionmetrics_spx_european_2024/20260410-024302/figures/week8b_spx_vs_equity_comparison.png
+
+Next step:
+Week 9 — train PaperMLP on both datasets separately, compare test MSE,
+scatter predicted vs actual, interpret differences between the two pathways.
