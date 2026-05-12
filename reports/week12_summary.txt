@@ -1,0 +1,75 @@
+WEEK 12 SUMMARY — Simple MLP Overfitting Study: SPX European Options 2024
+ 
+================================================================
+MOTIVATION (Professor Feedback from Week 10 Meeting)
+================================================================
+Week 10 partial dependence plot for r showed:
+  - MLP predicted price oscillated over a narrow rate range (~3.6%–4.6%)
+  - Response was not smooth (expected: call price ↑ with r under BS,
+    because rho = K·T·e^(-rT)·N(d2) > 0 always)
+  - Professor: "I would expect this to be a lot smoother. Maybe overfitting.
+    I would redo these plots for a much simpler neural network."
+  - Suggestion: retrain on simpler architectures from the paper grid
+ 
+================================================================
+DUAL-RATE DESIGN
+================================================================
+MLP feature r:   CRSP 10Y Treasury (TREASNOX=2000007, tdytm/100)
+  → Same as Week 10. Narrow range, constant daily value.
+  → Mean: 0.0415 | Range: 0.0106
+ 
+BS benchmark r:  optionm.zerocd (percent → /100, interpolated)
+BS benchmark q:  optionm.borrate2024 (decimal, interpolated)
+  → IvyDB exact formula | BS residual ≈ 0 (verified Week 11)
+ 
+================================================================
+ARCHITECTURES
+================================================================
+Architecture | Params  | Test MSE (scaled) | Training Hours
+2L_50N          |  2,851 | 4.0648e-03          | 0.1308
+3L_50N          |  5,401 | 3.7395e-03          | 0.1452
+2L_100N         | 10,701 | 3.6935e-03          | 0.1410
+ 
+================================================================
+SMILE RECOVERY (MAE, dollar terms)
+================================================================
+IvyDB BS MAE (formula baseline):
+2L_50N: $5.25
+3L_50N: $4.92
+2L_100N: $4.84
+ 
+================================================================
+TEMPORAL SPLIT (BEST SIMPLE ARCH: 2L_100N)
+================================================================
+Random split MSE:   3.6935e-03
+Temporal split MSE: 2.4277e-02
+Ratio: 6.57x  (Week 10 3L500N was 7.87x for reference)
+ 
+================================================================
+VISUALIZATIONS
+================================================================
+1. Architecture comparison bar chart:    runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_architecture_comparison.png
+2. Learning curves (train/val gap):      runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_learning_curves_overlaid.png
+3. Partial dependence (4 features × 3): runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_partial_dependence_all_models.png
+   → Rate panel annotated with % smooth steps per model
+4. Residual vs fitted (4 panels):       runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_residual_vs_fitted.png
+5. Smile recovery (all 3 models):        runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_smile_recovery_all_models.png
+6. Moneyness bucket RMSE bar:            runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_bucket_rmse_bar.png
+7. Temporal split bar:                   runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_temporal_split_bar.png
+8. Rate distribution comparison:         runs/week12_spx_simple_mlp_overfitting_study/20260507-220438/figures/week12_rate_distribution_comparison.png
+ 
+================================================================
+CONCLUSION
+================================================================
+The CRSP 10Y rate range is only 0.0106 wide across all
+of 2024. Within that narrow band the Week 10 3L500N model (~750k params)
+had enough capacity to memorize training noise that happened to correlate
+with particular rate values, producing a jagged PDP curve.
+ 
+The simpler paper-grid models trained here (2L50N, 3L50N, 2L100N) have
+far less capacity. The rate PDP panels above show whether reducing model
+complexity recovers a smooth, upward-sloping rate response consistent
+with Black-Scholes rho > 0.
+ 
+The learning curve generalization gap and residual vs fitted plots
+provide additional direct evidence for or against overfitting.
