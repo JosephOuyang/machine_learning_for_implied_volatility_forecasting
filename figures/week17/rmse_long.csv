@@ -1,0 +1,109 @@
+framework,horizon,cp,bucket,rmse
+BS+NN Indep,same_day,Call,ITM,2.358108026395349
+BS+NN Indep,same_day,Call,ATM,1.53692092137261
+BS+NN Indep,same_day,Call,OTM,2.4169731281111324
+BS+NN Indep,same_day,Put,ITM,3.651356201521705
+BS+NN Indep,same_day,Put,ATM,1.4079681036714375
+BS+NN Indep,same_day,Put,OTM,2.286976045387284
+BS+NN Seq,same_day,Call,ITM,1.935746254495382
+BS+NN Seq,same_day,Call,ATM,0.6022359466034242
+BS+NN Seq,same_day,Call,OTM,1.5104195182241644
+BS+NN Seq,same_day,Put,ITM,1.3592945116912711
+BS+NN Seq,same_day,Put,ATM,0.5557225931649399
+BS+NN Seq,same_day,Put,OTM,1.9322981481428299
+Heston+NN Indep,same_day,Call,ITM,1.80248078781205
+Heston+NN Indep,same_day,Call,ATM,0.8846131289303972
+Heston+NN Indep,same_day,Call,OTM,1.3701912617162904
+Heston+NN Indep,same_day,Put,ITM,2.6055473919497287
+Heston+NN Indep,same_day,Put,ATM,0.9402852239715713
+Heston+NN Indep,same_day,Put,OTM,1.3834506513727145
+Heston+NN Seq,same_day,Call,ITM,1.6232847924981204
+Heston+NN Seq,same_day,Call,ATM,0.7482150786693117
+Heston+NN Seq,same_day,Call,OTM,1.214066875510666
+Heston+NN Seq,same_day,Put,ITM,1.2372059581993706
+Heston+NN Seq,same_day,Put,ATM,0.7662687164524906
+Heston+NN Seq,same_day,Put,OTM,1.3015951780110873
+Pure NN Seq,same_day,Call,ITM,1.9627043218436708
+Pure NN Seq,same_day,Call,ATM,0.6332838731010891
+Pure NN Seq,same_day,Call,OTM,1.4936811342686587
+Pure NN Seq,same_day,Put,ITM,1.3543582312029787
+Pure NN Seq,same_day,Put,ATM,0.5759549274995978
+Pure NN Seq,same_day,Put,OTM,1.946618660427076
+HestonFeature Seq,same_day,Call,ITM,0.9276919995929374
+HestonFeature Seq,same_day,Call,ATM,0.5475067220443256
+HestonFeature Seq,same_day,Call,OTM,0.8721381823250491
+HestonFeature Seq,same_day,Put,ITM,0.9400241471975699
+HestonFeature Seq,same_day,Put,ATM,0.5452633286400641
+HestonFeature Seq,same_day,Put,OTM,0.7894636056996455
+BS+NN Indep,one_day_ahead,Call,ITM,2.8594726046437846
+BS+NN Indep,one_day_ahead,Call,ATM,1.686929741104888
+BS+NN Indep,one_day_ahead,Call,OTM,2.36695093386392
+BS+NN Indep,one_day_ahead,Put,ITM,3.404152565253393
+BS+NN Indep,one_day_ahead,Put,ATM,1.5571085890136633
+BS+NN Indep,one_day_ahead,Put,OTM,2.427628971571924
+BS+NN Seq,one_day_ahead,Call,ITM,2.49511458171357
+BS+NN Seq,one_day_ahead,Call,ATM,1.0829974661402442
+BS+NN Seq,one_day_ahead,Call,OTM,1.6712314681056872
+BS+NN Seq,one_day_ahead,Put,ITM,1.749755613345624
+BS+NN Seq,one_day_ahead,Put,ATM,1.026380829548249
+BS+NN Seq,one_day_ahead,Put,OTM,2.210501364349541
+Heston+NN Indep,one_day_ahead,Call,ITM,2.36302987906029
+Heston+NN Indep,one_day_ahead,Call,ATM,0.9334314824984364
+Heston+NN Indep,one_day_ahead,Call,OTM,1.4414292563496844
+Heston+NN Indep,one_day_ahead,Put,ITM,2.529192241959804
+Heston+NN Indep,one_day_ahead,Put,ATM,0.9634251170074873
+Heston+NN Indep,one_day_ahead,Put,OTM,1.5122011977800753
+Heston+NN Seq,one_day_ahead,Call,ITM,2.14056635354583
+Heston+NN Seq,one_day_ahead,Call,ATM,0.8872002697000035
+Heston+NN Seq,one_day_ahead,Call,OTM,1.3697764173974882
+Heston+NN Seq,one_day_ahead,Put,ITM,1.6104362394238847
+Heston+NN Seq,one_day_ahead,Put,ATM,0.8495016611049334
+Heston+NN Seq,one_day_ahead,Put,OTM,1.4805576998258245
+Pure NN Seq,one_day_ahead,Call,ITM,2.5310790977348736
+Pure NN Seq,one_day_ahead,Call,ATM,1.171874631780713
+Pure NN Seq,one_day_ahead,Call,OTM,1.7270768787985258
+Pure NN Seq,one_day_ahead,Put,ITM,1.7119215320803904
+Pure NN Seq,one_day_ahead,Put,ATM,1.1235574116660234
+Pure NN Seq,one_day_ahead,Put,OTM,2.2673086119993138
+HestonFeature Seq,one_day_ahead,Call,ITM,1.938468630175335
+HestonFeature Seq,one_day_ahead,Call,ATM,0.7833437979326351
+HestonFeature Seq,one_day_ahead,Call,OTM,1.205377118584464
+HestonFeature Seq,one_day_ahead,Put,ITM,1.7297861878516891
+HestonFeature Seq,one_day_ahead,Put,ATM,0.7675601840507178
+HestonFeature Seq,one_day_ahead,Put,OTM,1.1808246303528063
+BS+NN Indep,five_day_ahead,Call,ITM,3.183040135470804
+BS+NN Indep,five_day_ahead,Call,ATM,2.0943563656974984
+BS+NN Indep,five_day_ahead,Call,OTM,2.561008815702478
+BS+NN Indep,five_day_ahead,Put,ITM,3.5959706308521566
+BS+NN Indep,five_day_ahead,Put,ATM,1.962918223273497
+BS+NN Indep,five_day_ahead,Put,OTM,2.701843834633345
+BS+NN Seq,five_day_ahead,Call,ITM,2.755943940864493
+BS+NN Seq,five_day_ahead,Call,ATM,1.575546863278361
+BS+NN Seq,five_day_ahead,Call,OTM,1.8503770705773925
+BS+NN Seq,five_day_ahead,Put,ITM,1.950307423975458
+BS+NN Seq,five_day_ahead,Put,ATM,1.5233669410470354
+BS+NN Seq,five_day_ahead,Put,OTM,2.5391150210389903
+Heston+NN Indep,five_day_ahead,Call,ITM,2.722347145565945
+Heston+NN Indep,five_day_ahead,Call,ATM,1.0033660060512628
+Heston+NN Indep,five_day_ahead,Call,OTM,1.5118972328213556
+Heston+NN Indep,five_day_ahead,Put,ITM,2.723530936012891
+Heston+NN Indep,five_day_ahead,Put,ATM,1.0415902908072703
+Heston+NN Indep,five_day_ahead,Put,OTM,1.6076804898425499
+Heston+NN Seq,five_day_ahead,Call,ITM,2.437385274629362
+Heston+NN Seq,five_day_ahead,Call,ATM,0.9577696535345591
+Heston+NN Seq,five_day_ahead,Call,OTM,1.4722650094061187
+Heston+NN Seq,five_day_ahead,Put,ITM,1.8438192949356322
+Heston+NN Seq,five_day_ahead,Put,ATM,0.9264402840604896
+Heston+NN Seq,five_day_ahead,Put,OTM,1.5818850874426365
+Pure NN Seq,five_day_ahead,Call,ITM,2.9602099591525413
+Pure NN Seq,five_day_ahead,Call,ATM,1.951985904966868
+Pure NN Seq,five_day_ahead,Call,OTM,2.079601777988304
+Pure NN Seq,five_day_ahead,Put,ITM,2.036578211594741
+Pure NN Seq,five_day_ahead,Put,ATM,1.9055772763218795
+Pure NN Seq,five_day_ahead,Put,OTM,2.804413347661507
+HestonFeature Seq,five_day_ahead,Call,ITM,2.6979896500968152
+HestonFeature Seq,five_day_ahead,Call,ATM,1.2913789888373952
+HestonFeature Seq,five_day_ahead,Call,OTM,1.6428790380282146
+HestonFeature Seq,five_day_ahead,Put,ITM,2.3438082042301196
+HestonFeature Seq,five_day_ahead,Put,ATM,1.2858999996580105
+HestonFeature Seq,five_day_ahead,Put,OTM,1.7380531858816752
