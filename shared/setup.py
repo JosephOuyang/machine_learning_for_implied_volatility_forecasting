@@ -142,6 +142,29 @@ def save_notes(run_dir: str, text: str):
         f.write(text.strip() + "\n")
 
 
+def load_run_results(task: str, run_id: str = None, base_dir: str = "runs"):
+    """Load JSON files from a run folder.
+
+    If run_id is None, picks the most recent run for the given task.
+    Returns (run_dir, data) where data is a dict keyed by JSON filename stem.
+    """
+    task_dir = os.path.join(base_dir, task)
+    if run_id is None:
+        runs = sorted(
+            [d for d in os.listdir(task_dir) if os.path.isdir(os.path.join(task_dir, d))]
+        )
+        if not runs:
+            raise FileNotFoundError(f"No runs found for task '{task}' in {task_dir}")
+        run_id = runs[-1]
+    run_dir = os.path.join(task_dir, run_id)
+    data = {}
+    for fname in os.listdir(run_dir):
+        if fname.endswith(".json"):
+            with open(os.path.join(run_dir, fname)) as f:
+                data[fname[:-5]] = json.load(f)
+    return run_dir, data
+
+
 # Mount on import so notebooks get the original behavior with a single import.
 mount_drive()
 print("shared.setup ready")
@@ -150,6 +173,6 @@ __all__ = [
     "np", "plt", "norm", "qmc", "torch", "nn", "F", "optim",
     "StepLR", "LinearLR", "OneCycleLR", "LambdaLR",
     "json", "datetime", "subprocess", "os",
-    "SEED", "start_run", "save_json", "save_notes",
+    "SEED", "start_run", "save_json", "save_notes", "load_run_results",
     "DRIVE_PROJECT_DIR", "mount_drive",
 ]
