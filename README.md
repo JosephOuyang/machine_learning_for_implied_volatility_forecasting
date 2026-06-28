@@ -45,11 +45,13 @@ A single-year exploration on real OptionMetrics data, **pricing** observed optio
 - **Week 11** — reconciled BS-benchmark rates to **IvyDB Manual v6.0** exactly (`zerocd` for r, `borrate2024` for q), driving the BS residual median to ≈ \$0
 - **Week 12** — **overfitting investigation**: a jagged rate partial-dependence curve in the large 3L-500N model prompted retraining on simpler paper-grid architectures to test whether model capacity, not data, produced the non-smooth rate response
 
-### Stage 4 — Jiang Dataset Replication *(Week 14)*
-- Built the full **S&P 100** dataset per Jiang Section 2: European **XEO** (secid 112878) and American **OEX** (secid 109764), **2016–2023**
+### Stage 4 — Jiang Dataset & Replication *(Weeks 14–15)*
+- Built the full **S&P 100** dataset per Jiang Section 2: European **XEO** (secid 112878) and American **OEX** (secid 109764), **2016–2023** (Week 14)
 - Applied Jiang's filters: moneyness ∈ [0.80, 1.60], τ ∈ [20, 1094] days, ATM band [0.97, 1.03], **no volume filter**
 - IV summary statistics match Jiang's Tables 1–2 closely, though **observation counts differ** from the paper (European 3.10M vs Jiang's 2.32M); the discrepancy is documented and flagged for clarification
-- Follows Jiang's pipeline: American prices are **de-Americanized** (Carr & Wu 2010, via binomial-tree IV) into European-equivalent prices before Black-Scholes and Heston (FFT) calibration
+- Follows Jiang's pipeline: American prices are **de-Americanized** (Carr & Wu 2010, via binomial-tree IV) into European-equivalent prices before Black-Scholes and Heston (FFT) calibration (Week 15)
+- Trained all five Jiang frameworks (BS+NN and Heston+NN independent/sequential, Pure NN sequential) across same-day, 1-day-ahead, and 5-day-ahead horizons on the OEX American set, reproducing Tables 4–6 (Week 15)
+- Shared infrastructure extracted into `shared/jiang_common.py`: JiangNN (32→16→8→1), vectorized BS/Heston calibration with checkpoint-resume, de-Americanization, and `run_framework` (Week 15)
 
 ### Stage 5 — Heston Feature Extension *(Week 16)*
 Instead of treating Heston as a **residual corrector**, this extension feeds the Heston-implied volatility **directly as a feature** to a sequentially trained NN, testing whether Heston σ supplies nonlinear structure a residual formulation does not exploit. Results are compared side-by-side against Jiang Tables 4–5.
@@ -59,16 +61,25 @@ Consolidated comparison across all frameworks and horizons: side-by-side RMSE ta
 
 > The five Jiang frameworks (BS+NN and Heston+NN, each independent/sequential, plus Pure NN sequential-only) are trained on CMU's Wright cluster across the same-day, 1-day, and 5-day horizons, with both K-splitting (strike divisible by 10) and R-splitting (70:30), over four data setups (EU→EU, AM→AM, EU→AM, EU+AM→AM). See the notebooks and `reports/` for current RMSE results.
 
+### Stage 7 — Overfitting Study *(Week 18)*
+Diagnosed the in-sample / out-of-sample gap across all frameworks and tested two regularization routes under Professor Schafer's direction:
+- **Task 1 — Baseline**: 800 epochs / batch 32, standard 32→16→8 architecture, no regularization
+- **Task 2 — Simpler architecture**: reduced to 16→8 hidden layers; compared against baseline at focal horizon (5-day-ahead) via overfit ratio = 100 × (OOS − IS) / IS
+- **Task 3 — Dropout sweep**: p ∈ {0.1, 0.2, 0.3}; overfit-ratio table as headline metric with absolute OOS RMSE as a guardrail against degraded generalization
+- Horizon-pair percent-difference analysis (same-day → 1-day, → 5-day) by call/put × moneyness, baseline vs simpler architecture
+
 ---
 
 ## Architecture
 
-**Jiang replication / Heston extension (Stages 4–6).** Per Jiang et al. (2026)
+**Jiang replication / Heston extension (Stages 4–7).** Per Jiang et al. (2026)
 Table 3: a feed-forward network with **three hidden layers (32 → 16 → 8)**,
 ReLU activation, trained with **Adam, 800 epochs, batch size 32**. Inputs are
 moneyness `m` and maturity `τ`. For BS+NN and Heston+NN the network learns the
 *error surface* `ε = σ_market − σ_model`; Pure NN learns the surface directly.
-The Week 16 extension adds Heston-implied σ as a direct input.
+The Week 16 extension adds Heston-implied σ as a direct input. The Week 18
+overfitting study additionally tests a **simpler 16→8 architecture** and
+**dropout** (p ∈ {0.1, 0.2, 0.3}) as regularization strategies.
 
 **Synthetic / transformed-IV work (Stages 1–2).** Separate from the Jiang
 architecture: MLPs from the Della Corte grid (2–3 layers × {50–500} nodes),
@@ -114,8 +125,8 @@ Developed and trained on **Google Colab** with Google Drive persistence. Core de
 ```
 machine_learning_for_implied_volatility_forecasting/
 ├── shared/      # setup module imported by every notebook (setup.py)
-├── notebooks/   # 8 notebooks, organized by topic — see notebooks/README.md
-├── figures/     # plots and tables, by week (week_02 … week_17)
+├── notebooks/   # 9 notebooks, organized by topic — see notebooks/README.md
+├── figures/     # plots and tables, by week (week_02 … week_18)
 ├── reports/     # weekly summaries + mid-semester progress report
 ├── sources/     # reference papers
 ├── .gitignore · LICENSE · README.md
