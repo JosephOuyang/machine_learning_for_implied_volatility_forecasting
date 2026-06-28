@@ -1,0 +1,64 @@
+WEEK 17 SUMMARY — Comprehensive Framework Comparison: 18 Configurations
+
+================================================================
+OBJECTIVE
+================================================================
+Aggregate the full battery of frameworks across all three forecast horizons and
+build comparison tables and visualizations to observe relationships and draw
+conclusions. Each "framework" is one (model x training x horizon) configuration
+carrying both an in-sample RMSE (Table 4 style) and an out-of-sample RMSE
+(Table 5 style).
+
+The 18 frameworks (6 per horizon):
+  BS+NN Indep, BS+NN Seq, Heston+NN Indep, Heston+NN Seq, Pure NN Seq,
+  HestonFeature Seq (extension)
+  x {same-day, one-day-ahead, five-day-ahead}
+
+================================================================
+COMPARISON TABLES (vs Jiang et al.)
+================================================================
+Table A — In-sample (Table 4) + out-of-sample (Table 5), AM to AM, R-splitting.
+  Our IS/OOS RMSE beside paper values with absolute and percent differences.
+  5-day in-sample equals 1-day in-sample (shared Panel C). HestonFeature has no
+  paper counterpart (shown as —).
+Table B — OOS RMSE by Call/Put x ITM/ATM/OTM (Table 6 Panel B), sequential models.
+  Paper values rendered beneath ours, green where we beat the paper, red where not.
+Table 6 (all frameworks) — full 6-cell Call/Put x bucket layout across all three
+  horizons, paper values shown only where Jiang reports them, with a per-framework
+  Avg column.
+
+================================================================
+ANALYSIS (where error concentrates, who wins)
+================================================================
+Four questions answered from the table6 JSONs (sample-averaged OOS RMSE %):
+  (1) Hardest moneyness bucket — ITM/ATM/OTM ranking; ATM easiest, tails hardest.
+  (2) Calls vs Puts — which is predicted better on average.
+  (3) Lowest-overall framework — ranked across all buckets and horizons, plus a
+      same-day-only ranking for a cleaner apples-to-apples read.
+  (4) Whether HestonFeature wins — count of cells where it has the lowest RMSE
+      and its overall rank among all frameworks.
+A framework x moneyness heatmap (greener = lower error) summarizes the picture.
+
+================================================================
+TIME-SERIES VISUALIZATIONS (60-day MA OOS RMSE)
+================================================================
+Stacked six-panel figures, one per focal horizon (same-day / 1-day / 5-day),
+each with the focal horizon drawn bright and the other two faint for context:
+  Panel 1 — Independent vs Sequential (BS+NN, Heston+NN)
+  Panel 2 — By framework (sequential)
+  Panel 3 — Bucket RMSE ITM/ATM/OTM (HestonFeature solid, Pure NN dashed)
+  Panel 4a/4b — Call/Put x bucket for HestonFeature and Pure NN
+All curves use a strict 60-trading-day window, matching Jiang Figs 3-6.
+
+================================================================
+ARTIFACTS
+================================================================
+- table45_comparison_ours_vs_jiang.csv
+- table6_comparison_callput_ours_vs_jiang.csv
+- table6_all_frameworks_callput.csv
+- analysis_17_3/ (rmse_long.csv, framework_by_bucket.csv/.html, analysis_summary.json)
+- figures/ma60_oos_focal_{same_day,one_day_ahead,five_day_ahead}.png
+
+Next step:
+Week 18 — overfitting study: pair increased model complexity against dropout and
+a simpler architecture to diagnose and reduce the generalization gap.

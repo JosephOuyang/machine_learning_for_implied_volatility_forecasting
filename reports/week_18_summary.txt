@@ -1,0 +1,71 @@
+WEEK 18 SUMMARY — Overfitting Study: Baseline vs Simpler Arch vs Dropout
+
+================================================================
+MOTIVATION (Professor Schafer)
+================================================================
+Diagnose whether the baseline NN frameworks overfit, and test two regularization
+routes for closing the in-sample / out-of-sample gap. Professor's direction:
+increase model complexity paired with dropout, and compare against a simplified
+architecture, focusing on the overfit ratio = 100*(OOS-IS)/IS.
+
+================================================================
+THREE-TASK DESIGN
+================================================================
+Task 1 — Baseline:   800 epochs / batch 32, default architecture, no dropout.
+Task 2 — Simpler:    800 epochs / batch 32, simplified (16,8) architecture.
+Task 3 — Dropout:    dropout sweep p = 0.1 / 0.2 / 0.3.
+
+CRITICAL: Tasks 1 and 2 share an identical JSON schema (no arch/reg fields) and
+are distinguished ONLY by their root folder, so each tree is tagged with a task
+at load time. A guard flags any two tasks loading byte-identical OOS series, which
+would indicate a stale or duplicated folder.
+
+================================================================
+LOADING AND COVERAGE (Cells 18.0-18.1)
+================================================================
+- Fixed run path (not a fresh timestamped run) so a Colab disconnect only requires
+  re-running the scaffold; folder location stays stable.
+- Discovers results_*.json across all three task trees, tags each with task and
+  dropout_p, computes IS/OOS RMSE, overfit gap (pp) and overfit ratio (%).
+- Builds a coverage matrix, a side-by-side three-task comparison table at the focal
+  horizon (5-day-ahead), and delta-vs-baseline columns (Δratio<0 = less overfit,
+  ΔOOS<=0 = no out-of-sample cost).
+
+================================================================
+DROPOUT ANALYSIS (Cells 18.2-18.4)
+================================================================
+- Baseline (p=0) vs each dropout level: overfit-ratio table (headline) and
+  absolute OOS RMSE table (guardrail), with clustered bars per framework.
+- Dropout trend with baseline as the p=0 anchor (open marker), wanting the ratio
+  to fall without OOS RMSE rising.
+- 60-day MA IS vs OOS curves overlaying baseline against each dropout level.
+
+================================================================
+THREE-TASK AND BUCKET COMPARISONS (Cells 18.5-18.11)
+================================================================
+- Headline three-task bar chart: overfit ratio and absolute OOS by task, with the
+  best dropout level per config selected.
+- Table-6 call/put x moneyness loaded across all tasks; baseline/simpler 6-cell
+  tables synthesized from results_ callput fields since those runs never wrote
+  table6 JSONs.
+- 60-day MA OOS RMSE by moneyness bucket, baseline bold-black against dropout.
+- Table-6 OOS RMSE by Call/Put x moneyness, baseline vs all dropout levels.
+- Horizon-pair percent-difference tables and bar charts (same->1day, same->5day,
+  1day->5day), by Call/Put x moneyness and by moneyness only, baseline vs simpler.
+
+================================================================
+ARTIFACTS
+================================================================
+- w18_three_task_compare_{focal}.csv
+- figures/w18_baseline_vs_dropout_summary_{focal}.png
+- figures/w18_dropout_sweep_from_baseline_{focal}.png
+- figures/w18_ma60_is_vs_oos_baseline_and_dropout_{focal}.png
+- figures/w18_three_task_comparison_{focal}.png
+- figures/w18_ma60_oos_by_moneyness_{focal}.png
+- figures/w18_table6_callput_moneyness_all_dropout_{focal}.png
+- figures/cell188_horizon_pctdiff_callput.csv, cell189_horizon_pctdiff_moneyness.csv
+- figures/cell1810_*.png, cell1811_*.png
+
+Next step:
+Per Professor Schafer's direction, extend to increased model complexity paired
+with dropout (p=0.4) as the next experimental step in the regularization study.
