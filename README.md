@@ -67,7 +67,7 @@ Diagnosed the in-sample / out-of-sample gap across all frameworks and tested reg
 - **Task 2 — Simpler architecture**: reduced to 16→8 hidden layers; compared against baseline at focal horizon (5-day-ahead) via overfit ratio = 100 × (OOS − IS) / IS
 - **Task 3 — Dropout sweep**: p ∈ {0.1, 0.2, 0.3}; overfit-ratio table as headline metric with absolute OOS RMSE as a guardrail against degraded generalization
 - Horizon-pair percent-difference analysis (same-day → 1-day, → 5-day) by call/put × moneyness, baseline vs simpler architecture
-- **Task 4 (Week 19) — Increased complexity + dropout**: the professor's suggested next step — a much larger 128→64→32→16 architecture swept at p ∈ {0.0, 0.02, 0.4}. Complexity alone (p=0.0) made overfitting *worse* than the Week 18 baseline in every framework (overfit ratio +35 pp on average); complexity + heavy dropout (p=0.4) pushed the overfit ratio well below Week 18's best dropout result, but absolute OOS RMSE rose in every config and was worse than Week 18's own best-dropout OOS RMSE in half of them — so the ratio gain is not a clean generalization win. See `reports/week_19_summary.txt` for the full breakdown.
+- **Task 4 (Week 19) — Increased complexity + dropout**: We built a much larger 128→64→32→16 architecture swept at p ∈ {0.0, 0.02, 0.4}. Complexity alone (p=0.0) made overfitting *worse* than the Week 18 baseline in every framework (overfit ratio +35 pp on average); complexity + heavy dropout (p=0.4) pushed the overfit ratio well below Week 18's best dropout result, but absolute OOS RMSE rose in every config and was worse than Week 18's own best-dropout OOS RMSE in half of them, so the ratio gain is not a clean generalization win. See `reports/week_19_summary.txt` for the full breakdown.
 
 ---
 
