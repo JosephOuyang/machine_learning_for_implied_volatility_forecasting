@@ -12,13 +12,13 @@ Where a week was split into parts, the part is preserved as a suffix
 
 ## Contents
 
-- `week_02_summary.md` … `week_18_summary.txt` — weekly result summaries
+- `week_02_summary.md` … `week_19_summary.txt` — weekly result summaries
 - `week_05_final_comparison.md` — 100k vs 1M dataset comparison
 - `Mid-Semester Research Progress Report.pdf` — consolidated progress report
 
 > A few weeks (8, 9) retain both an `.md` and a `.txt` summary from earlier
 > drafts; these may be consolidated in future.
-> Weeks 15–18 summaries are sourced directly from the cumulative
+> Weeks 15–19 summaries are sourced directly from the cumulative
 > `options_pricing_main.ipynb` in Google Drive.
 
 For the week → notebook mapping, see `figures/README.md`.
