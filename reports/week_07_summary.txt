@@ -1,0 +1,36 @@
+WEEK 7 SUMMARY — Reproducibility Study: 2L 150N (3 Seeds)
+
+Goal:
+Replicate the paper's reported test MSE of (2.76 ± 0.61) × 10⁻⁶ for the 2-layer, 150-node
+architecture by matching TensorFlow's Adam epsilon (1e-7 vs PyTorch default 1e-8).
+Glorot Normal initialization was already in place from prior weeks.
+
+Discrepancy Fix Applied:
+- Adam epsilon: 1e-7 (TensorFlow default). Previous code used PyTorch default 1e-8.
+
+Dataset Structure (paper-exact):
+- 1,000,000 LHS samples: 800,000 train / 200,000 validation
+- 100,000 separate LHS test samples
+
+Architecture: 2 hidden layers, 150 nodes each, ReLU activation
+Hyperparameters: LR=1e-5, Batch=64, Epochs=200, Adam eps=1e-7
+Seeds: [42, 123, 456]
+
+Per-Seed Results:
+ seed     test_mse  training_hours
+   42 9.792606e-08        0.471977
+  123 8.450576e-08        0.465629
+  456 1.074188e-07        0.476013
+
+Aggregate Results:
+- Mean Test MSE  : 9.6617e-08
+- Std  Test MSE  : 1.1512e-08
+- Reported as    : (9.66e-08 ± 1.15e-08)
+- Paper target   : (2.76e-06 ± 0.61e-06)
+- Mean Train Hrs : 0.4712
+- Std  Train Hrs : 0.0052
+
+Artifacts:
+- Results CSV        : runs/week7_reproducibility_2L_150N/20260312-161614/week7_results_table.csv
+- Per-seed bar chart : runs/week7_reproducibility_2L_150N/20260312-161614/figures/week7_per_seed_test_mse.png
+- Train/val curves   : runs/week7_reproducibility_2L_150N/20260312-161614/figures/week7_mse_curves_all_seeds.png

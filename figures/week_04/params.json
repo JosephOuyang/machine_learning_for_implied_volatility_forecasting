@@ -1,0 +1,34 @@
+{
+  "week": 4,
+  "goal": "Align with paper: (i) LR range test, (ii) MLP grid (2/3 layers \u00d7 50..500 nodes), (iii) record training time + test MSE, (iv) Figure 6.16-style plot",
+  "paper_hyperparams": {
+    "activation": "ReLU",
+    "loss": "MSE",
+    "lr_paper": 1e-05,
+    "batch_size_paper": 64,
+    "epochs_paper": 200,
+    "device_for_timing": "cpu",
+    "torch_num_threads": 1
+  },
+  "lr_range_test": {
+    "lr_start": 1e-08,
+    "lr_end": 0.1,
+    "num_iter": 400,
+    "beta": 0.98,
+    "divergence_factor": 4.0
+  },
+  "mlp_grid": {
+    "layers": [
+      2,
+      3
+    ],
+    "nodes_per_layer": [
+      50,
+      100,
+      150,
+      200,
+      250,
+      500
+    ]
+  }
+}

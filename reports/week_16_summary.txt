@@ -1,0 +1,59 @@
+WEEK 16 SUMMARY — HestonFeature Extension: Heston IV as a Model Input
+
+================================================================
+MOTIVATION (Professor Schafer)
+================================================================
+"What if instead of trying to fit through this residual, somebody used the
+Heston price as a feature in the model? The relationship isn't that simple.
+I would set it up so the Heston prediction is included as a feature and see
+how that compares."
+
+Contrast of framings:
+  Heston+NN (Week 15):  pred = sigma_heston + NN(moneyness, tau)   [additive]
+  HestonFeature (W16):  pred = NN(moneyness, tau, sigma_heston)    [feature]
+The feature framing lets the network learn arbitrary nonlinear interactions
+between Heston IV and the option characteristics rather than a fixed additive
+correction.
+
+================================================================
+CONFIGURATION
+================================================================
+Architecture: JiangNN(in_dim=3): 32->16->8->1, ReLU, Xavier Normal
+Features:     moneyness, tau, sigma_heston
+Label:        sigma_market (label_pure_nn — direct prediction, no correction)
+Mode:         sequential only
+Horizons:     same-day, one-day-ahead (five-day-ahead added in Week 17 battery)
+Hyperparams:  N_EPOCHS=200, BATCH_SIZE=64, LR=1e-3, Adam eps=1e-7
+
+Baselines for comparison:
+  Pure NN Sequential   (Week 15, in_dim=2, no Heston input)
+  Heston+NN Sequential (Week 15, in_dim=2, additive residual)
+
+================================================================
+RESULTS LOADING AND VISUALIZATION
+================================================================
+- Loaded Week 15 baselines + Week 16 HestonFeature results into one dict,
+  extracting daily OOS series, mean IS/OOS RMSE, and ITM/ATM/OTM bucket means.
+- Summary RMSE table (styled), moneyness bucket bar chart, and 60-day moving
+  average OOS RMSE curves grouped by framework family.
+- Side-by-side comparison against Jiang Tables 4-5 (same-day Panel B,
+  one-day-ahead Panel C) with percent-difference columns.
+
+================================================================
+KEY FINDING
+================================================================
+Adding sigma_heston as a direct feature substantially lowered both in-sample
+and out-of-sample RMSE relative to Pure NN and Heston+NN, with the HestonFeature
+Sequential same-day OOS RMSE falling below ~1 pp IV — the strongest framework in
+the same-day comparison and well under Jiang's reported sequential figures.
+
+================================================================
+ARTIFACTS
+================================================================
+- results_HestonFeature_sequential_{same_day,one_day_ahead}.json
+- viz_bucket_rmse_bar.png, viz_60dayMA_combined.png
+- rmse_side_by_side_ours_vs_jiang_tables4_5.csv
+
+Next step:
+Week 17 — aggregate the full 18-framework battery across all three horizons and
+build the comprehensive comparison tables and time-series visualizations.

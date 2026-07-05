@@ -1,0 +1,12 @@
+Week 5 deliverable:
+- Load the full 1 million data points dataset.
+- Train the four "best" models from the paper's configurations on the full dataset:
+  - (2 layers, 50 nodes)
+  - (2 layers, 100 nodes)
+  - (3 layers, 50 nodes)
+  - (3 layers, 100 nodes)
+- Use the same hyperparameters as in Week 4: LR=1e-5, Batch Size=64, Epochs=200.
+- Compare training time and test MSE against the results from the 100k dataset.
+- Generate a bar chart showing Training Time & Test MSE.
+- Generate MSE curve plots (train/test) for these four models.
+- Summarize findings, comparing with previous results and the paper.

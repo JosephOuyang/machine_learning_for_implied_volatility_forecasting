@@ -1,0 +1,84 @@
+{
+  "configurations": [
+    {
+      "layers": 2,
+      "nodes": 50,
+      "lr_high_min_loss": 0.05680492161728314,
+      "lr_suggest": 0.005680492161728314
+    },
+    {
+      "layers": 2,
+      "nodes": 100,
+      "lr_high_min_loss": 0.03949037229576624,
+      "lr_suggest": 0.003949037229576624
+    },
+    {
+      "layers": 2,
+      "nodes": 150,
+      "lr_high_min_loss": 0.03359818286283717,
+      "lr_suggest": 0.003359818286283717
+    },
+    {
+      "layers": 2,
+      "nodes": 200,
+      "lr_high_min_loss": 0.03949037229576624,
+      "lr_suggest": 0.003949037229576624
+    },
+    {
+      "layers": 2,
+      "nodes": 250,
+      "lr_high_min_loss": 0.03949037229576624,
+      "lr_suggest": 0.003949037229576624
+    },
+    {
+      "layers": 2,
+      "nodes": 500,
+      "lr_high_min_loss": 0.048329302385716574,
+      "lr_suggest": 0.004832930238571657
+    },
+    {
+      "layers": 3,
+      "nodes": 50,
+      "lr_high_min_loss": 0.052396013530025404,
+      "lr_suggest": 0.00523960135300254
+    },
+    {
+      "layers": 3,
+      "nodes": 100,
+      "lr_high_min_loss": 0.016907141034735496,
+      "lr_suggest": 0.0016907141034735497
+    },
+    {
+      "layers": 3,
+      "nodes": 150,
+      "lr_high_min_loss": 0.00999999999999982,
+      "lr_suggest": 0.000999999999999982
+    },
+    {
+      "layers": 3,
+      "nodes": 200,
+      "lr_high_min_loss": 0.02069138081114751,
+      "lr_suggest": 0.002069138081114751
+    },
+    {
+      "layers": 3,
+      "nodes": 250,
+      "lr_high_min_loss": 0.014384498882876365,
+      "lr_suggest": 0.0014384498882876364
+    },
+    {
+      "layers": 3,
+      "nodes": 500,
+      "lr_high_min_loss": 0.008171103315457055,
+      "lr_suggest": 0.0008171103315457055
+    }
+  ],
+  "note": "LR range test performed on all 12 paper-aligned architectures. Paper uses lr=1e-5 for final training.",
+  "test_params": {
+    "lr_start": 1e-08,
+    "lr_end": 0.1,
+    "num_iter": 400,
+    "beta": 0.98,
+    "divergence_factor": 4.0
+  }
+}

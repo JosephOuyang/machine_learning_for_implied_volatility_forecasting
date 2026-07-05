@@ -1,0 +1,36 @@
+{
+  "run_dir": "runs/week17_comprehensive_framework_comparison/20260614-012435",
+  "q1_by_bucket": {
+    "ITM": 2.2242,
+    "ATM": 1.1138,
+    "OTM": 1.763
+  },
+  "q1_easiest": "ATM",
+  "q1_hardest": "ITM",
+  "q2_by_cp": {
+    "Call": 1.7008,
+    "Put": 1.6999
+  },
+  "q2_better": "Put",
+  "q3_by_framework": {
+    "HestonFeature Seq": 1.2904,
+    "Heston+NN Seq": 1.3582,
+    "Heston+NN Indep": 1.63,
+    "BS+NN Seq": 1.6848,
+    "Pure NN Seq": 1.791,
+    "BS+NN Indep": 2.4478
+  },
+  "q3_lowest": "HestonFeature Seq",
+  "q3b_same_day_by_framework": {
+    "HestonFeature Seq": 0.7703,
+    "Heston+NN Seq": 1.1484,
+    "BS+NN Seq": 1.316,
+    "Pure NN Seq": 1.3278,
+    "Heston+NN Indep": 1.4978,
+    "BS+NN Indep": 2.2764
+  },
+  "q4_hestonfeature_wins": 11,
+  "q4_total_cells": 18,
+  "q4_hestonfeature_overall_rank": 1,
+  "q4_num_frameworks": 6
+}

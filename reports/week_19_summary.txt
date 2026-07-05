@@ -1,0 +1,147 @@
+WEEK 19 SUMMARY — Does Increased Complexity Reduce Overfitting? (extends Week 18)
+
+================================================================
+MOTIVATION (Professor Schafer)
+================================================================
+Week 18 tested two regularization routes against the baseline's overfitting
+gap: a simpler (16,8) architecture, and a dropout sweep (p=0.1/0.2/0.3) on the
+paper's standard 32->16->8 architecture. The professor's stated next step was
+to extend to INCREASED model complexity paired with dropout (p=0.4), to test
+the opposite direction: does giving the network more capacity, combined with
+dropout, close the in-sample/out-of-sample gap further than Week 18's routes
+did -- or does added capacity just overfit harder unless dropout compensates?
+
+================================================================
+DESIGN
+================================================================
+One architecture, much bigger than Week 18's baseline: hidden_sizes
+[128, 64, 32, 16] (vs the paper's 32->16->8), swept at dropout
+p = 0.0 / 0.02 / 0.4:
+  p=0.0  -- "complex, no dropout" anchor (isolates the effect of capacity alone)
+  p=0.02 -- light dropout
+  p=0.4  -- heavy dropout (the professor's suggested extension point)
+Five-day-ahead horizon only (same scope as Week 18's dropout task). All six
+Jiang frameworks x mode combinations covered (BS+NN, Heston+NN independent/
+sequential, HestonFeature and Pure NN sequential).
+
+================================================================
+LOADING AND COVERAGE (Cells 19.0-19.1)
+================================================================
+- Fixed run path (matches Cell 18.0's convention) so a Colab disconnect only
+  requires re-running the scaffold.
+- Discovers results_*.json under "Week 19 Results", tags each with dropout_p,
+  computes IS/OOS RMSE, overfit gap (pp) and overfit ratio (%). Same guard as
+  Cell 18.1: warns if any two dropout levels loaded byte-identical OOS series.
+
+================================================================
+WEEK 19 INTERNAL DROPOUT SWEEP (Cells 19.2-19.3)
+================================================================
+- p=0.0 (complex) anchor vs p=0.02 / p=0.4: overfit-ratio table (headline) and
+  absolute OOS RMSE table (guardrail), clustered bars per framework.
+- 60-day MA IS vs OOS curves overlaying the anchor against each dropout level.
+
+================================================================
+HEADLINE — CROSS-WEEK COMPARISON (Cells 19.4-19.5)
+================================================================
+The actual research question, answered directly:
+
+1. Complexity ALONE (p=0.0, no dropout) made overfitting WORSE, not better,
+   in all 6 configs -- overfit ratio rose by +35.0 pp on average vs the Week 18
+   baseline (e.g. HestonFeature Seq: 279% -> 415%; Heston+NN Seq: 55% -> 83%).
+   A bigger network with no regularization simply has more capacity to
+   memorize the training set. This refutes the naive "more complexity helps"
+   hypothesis on its own.
+
+2. Complexity + HEAVY dropout (p=0.4, which minimizes the overfit ratio in
+   all 6 configs) DOES push the ratio well below Week 18's own best-dropout
+   result (mean ratio -85.5 pp vs Week 18 Baseline; e.g. HestonFeature Seq
+   falls to 2.7%, BS+NN Seq to 3.4%). But p=0.4 is also the WORST absolute OOS
+   RMSE of the three levels tested, in all 6 configs -- 1.3x-2.3x the best
+   achievable OOS RMSE for that config (e.g. BS+NN Seq: 2.52% -> 5.73%;
+   HestonFeature Seq: 2.40% -> 5.54%). The ratio win at p=0.4 is bought with a
+   real, not cosmetic, accuracy cost.
+
+   The p that actually minimizes absolute OOS RMSE (the guardrail) is NOT
+   p=0.4 in any config: it's the p=0.0 anchor itself (no dropout) in 4 of 6
+   configs (BS+NN Indep, BS+NN Seq, Heston+NN Indep, Pure NN Seq) and light
+   p=0.02 dropout in the other 2 (Heston+NN Seq, HestonFeature Seq). Using
+   this independently-selected OOS-best value -- not the p=0.4 ratio-winner's
+   OOS -- Week 19's best achievable OOS RMSE beats Week 18's own best-dropout
+   OOS RMSE in ALL 6 configs (mean -0.61 pp vs Week 18's best dropout, -0.08 pp
+   vs Week 18 Baseline; e.g. Heston+NN Seq: 2.62% -> 1.95%; HestonFeature Seq:
+   3.29% -> 2.40%). Note this OOS win is coming mostly from the bigger
+   architecture ALONE (p=0.0, no dropout, in 4 of 6 configs) -- it is evidence
+   for more capacity, not for dropout as a regularizer.
+
+VERDICT: no single p in the Week 19 sweep wins on both metrics for the same
+config -- the two panels in Cell 19.5 deliberately pick p independently per
+metric because the ratio-minimizer and the OOS-minimizer are different runs.
+p=0.4 minimizes the overfit ratio but is simultaneously the worst absolute OOS
+RMSE of the three levels tested, in every config: heavy dropout depresses
+in-sample fit at least as much as out-of-sample error, which mechanically
+shrinks the ratio without improving (and here, while measurably hurting)
+predictive accuracy. Absolute accuracy is instead best served by the bigger
+architecture with little or no dropout (p=0.0 in 4/6 configs, p=0.02 in the
+other 2), which modestly beats Week 18's own best-dropout OOS RMSE in every
+config -- a real result, but about raw capacity, not dropout. If the object of
+study is the overfitting RATIO specifically, Week 19's p=0.4 is the strongest
+lever found so far; if it's absolute predictive accuracy, the bigger
+architecture at p=0.0-0.02 beats every Week 18 config tested, and p=0.4 should
+be avoided.
+
+================================================================
+TABLE-6 AND BUCKET COMPARISONS (Cells 19.6-19.8)
+================================================================
+- Table-6 call/put x moneyness loaded directly for Week 19 (dropout_p read
+  from each file's folder name, not backfilled via an ambiguous DataFrame
+  join -- see Cell 19.6's docstring for why that matters).
+- Cross-week Table-6 bars: Week 18 Baseline vs Week 19 p=0.0 vs Week 19's
+  accuracy-best dropout level (lowest mean OOS across the 6 cells -- a
+  DIFFERENT selection than the ratio-best level used in 19.4/19.5). Like
+  19.4/19.5, this pick considers the p=0.0 anchor as a candidate, not just
+  p=0.02/p=0.4 (see Note below).
+- 60-day MA OOS RMSE by moneyness bucket, Week 19 p=0.0 anchor bold-black
+  against its own dropout levels.
+
+================================================================
+ARTIFACTS
+================================================================
+- w19_vs_w18_cross_compare_five_day_ahead.csv
+- figures/w19_anchor_vs_dropout_summary_five_day_ahead.png
+- figures/w19_ma60_is_vs_oos_anchor_and_dropout_five_day_ahead.png
+- figures/w19_vs_w18_comparison_five_day_ahead.png
+- figures/w19_table6_vs_w18_baseline_five_day_ahead.png
+- figures/w19_ma60_oos_by_moneyness_five_day_ahead.png
+
+Note: while building this analysis, Cell 18.6a's dropout_p backfill (a
+DataFrame join keyed on framework/mode/horizon/task only) was found to
+mislabel all of Week 18's table6 dropout rows as p=0.1 regardless of their
+true level, since it doesn't disambiguate by dropout_p. FIXED as part of this
+pass: Cell 18.6a now reads dropout_p directly from each file's source folder
+name, the same approach Week 19's table6 loader (Cell 19.6) already used.
+Cells 18.6b and 18.7 were re-run with the fix; the corrected
+figures/week_18/w18_table6_callput_moneyness_all_dropout_five_day_ahead.png
+now shows four genuinely distinct bars (baseline + p=0.1/0.2/0.3) per cell
+instead of three identical p=0.1 bars.
+
+A second bug was found in this same pass: Cells 19.4 and 19.7's "best
+dropout" pickers excluded the p=0.0 anchor from the candidate pool before
+taking the min. That exclusion is correct for Week 18 (baseline is a
+separate task, never mixed into the dropout pool) but wrong for Week 19,
+where p=0.0 is just another row in the same sweep -- excluding it hid every
+config where NOT using dropout was genuinely the best OOS choice, which
+turned out to be 4 of 6 configs. FIXED: both cells now pick from the full
+sweep including the anchor. This is what overturned Finding 2 above (Week
+19's best-dropout OOS RMSE went from "worse than Week 18 in 3/6 configs" to
+"better than Week 18 in 6/6 configs" once the anchor was correctly included
+as a candidate).
+
+Next step:
+The Week 19 dropout sweep only tested p=0.02 and p=0.4, and the accuracy
+cliff (OOS RMSE roughly doubles in several configs) sits somewhere in that
+gap -- p=0.02 barely moves the ratio, p=0.4 wins the ratio but is the worst
+OOS RMSE tested. A natural next step is to fill in that gap (e.g.
+p=0.1/0.2/0.3, mirroring Week 18's own grid but on the bigger architecture)
+to see whether a moderate dropout level can capture more of the ratio
+improvement than p=0.02 without the p=0.4 accuracy collapse, rather than
+treating p=0.4 as the only regularized option tested.

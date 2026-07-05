@@ -1,0 +1,93 @@
+{
+  "lr": 1e-05,
+  "batch": 64,
+  "epochs": 200,
+  "device": "cpu",
+  "torch_num_threads": 1,
+  "rows": [
+    {
+      "label": "2 layers 50 nodes",
+      "layers": 2,
+      "nodes": 50,
+      "train_hours": 0.12394017259722222,
+      "test_mse": 2.7892493842955445e-06
+    },
+    {
+      "label": "3 layers 50 nodes",
+      "layers": 3,
+      "nodes": 50,
+      "train_hours": 0.14142533747638888,
+      "test_mse": 2.3082910131051904e-06
+    },
+    {
+      "label": "2 layers 100 nodes",
+      "layers": 2,
+      "nodes": 100,
+      "train_hours": 0.13553542238611108,
+      "test_mse": 8.719680649846851e-07
+    },
+    {
+      "label": "3 layers 100 nodes",
+      "layers": 3,
+      "nodes": 100,
+      "train_hours": 0.16469201631583327,
+      "test_mse": 5.470124344356009e-07
+    },
+    {
+      "label": "2 layers 150 nodes",
+      "layers": 2,
+      "nodes": 150,
+      "train_hours": 0.15717015933472225,
+      "test_mse": 4.4451630392359223e-07
+    },
+    {
+      "label": "3 layers 150 nodes",
+      "layers": 3,
+      "nodes": 150,
+      "train_hours": 0.20170031881277775,
+      "test_mse": 3.8332363697008987e-07
+    },
+    {
+      "label": "2 layers 200 nodes",
+      "layers": 2,
+      "nodes": 200,
+      "train_hours": 0.16819785027861106,
+      "test_mse": 2.2871684318488406e-07
+    },
+    {
+      "label": "3 layers 200 nodes",
+      "layers": 3,
+      "nodes": 200,
+      "train_hours": 0.23882725913999997,
+      "test_mse": 1.826170591129994e-07
+    },
+    {
+      "label": "2 layers 250 nodes",
+      "layers": 2,
+      "nodes": 250,
+      "train_hours": 0.20045444373222204,
+      "test_mse": 1.949412862131794e-07
+    },
+    {
+      "label": "3 layers 250 nodes",
+      "layers": 3,
+      "nodes": 250,
+      "train_hours": 0.3179765120741667,
+      "test_mse": 5.378618280246882e-07
+    },
+    {
+      "label": "2 layers 500 nodes",
+      "layers": 2,
+      "nodes": 500,
+      "train_hours": 0.42913028750694415,
+      "test_mse": 9.991418099843941e-08
+    },
+    {
+      "label": "3 layers 500 nodes",
+      "layers": 3,
+      "nodes": 500,
+      "train_hours": 0.8350211066049996,
+      "test_mse": 8.569554556743242e-08
+    }
+  ]
+}

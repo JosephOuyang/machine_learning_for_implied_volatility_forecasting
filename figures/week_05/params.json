@@ -1,0 +1,23 @@
+{
+  "week": 5,
+  "goal": "Train 4 paper-aligned models on the full 1M dataset, compare results to 100k dataset",
+  "paper_hyperparams": {
+    "activation": "ReLU",
+    "loss": "MSE",
+    "lr_paper": 1e-05,
+    "batch_size_paper": 64,
+    "epochs_paper": 200,
+    "device_for_timing": "cpu",
+    "torch_num_threads": 1
+  },
+  "mlp_grid_subset": {
+    "layers": [
+      2,
+      3
+    ],
+    "nodes_per_layer": [
+      50,
+      100
+    ]
+  }
+}

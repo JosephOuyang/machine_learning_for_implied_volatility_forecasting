@@ -1,0 +1,3 @@
+split_type,train_period,test_period,test_mse
+Random 80/20 + separate test,Mixed all 2024,Mixed all 2024,0.001168435872177704
+Temporal 80/20 + separate test,Jan-Sep 2024 (r ≈ 0.0525-0.055),"Oct-Dec 2024 (r ≈ 0.047-0.050, post-cut)",0.00919806702726551

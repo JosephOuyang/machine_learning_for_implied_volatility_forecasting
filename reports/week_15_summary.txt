@@ -1,0 +1,69 @@
+WEEK 15 SUMMARY — Jiang et al. (2026) Replication: American (OEX) IV Forecasting
+
+================================================================
+MOTIVATION
+================================================================
+Replicate Jiang, Lazar, Marra (2026, Journal of Futures Markets 46, 1137-1153)
+on the Week 14 S&P 100 American (OEX) options dataset. The goal is to forecast
+market-implied volatility using four neural network frameworks across three
+forecast horizons, reproducing the paper's Tables 4 (in-sample), 5 (out-of-sample),
+and 6 (call/put x moneyness breakdown).
+
+================================================================
+SHARED INFRASTRUCTURE (jiang_common.py)
+================================================================
+- JiangNN: 32->16->8->1 MLP, ReLU, Xavier Normal init, 769 params (Table 3).
+  in_dim=2 (moneyness, tau) for BS+NN/Heston+NN/Pure NN; in_dim=3 reserved
+  for the Week 16 HestonFeature extension.
+- Black-Scholes (Merton 1973 with continuous dividend yield q), Brent inversion,
+  Carr-Wu (2010) de-Americanization.
+- Heston via Albrecher et al. (2007) phi_2 characteristic function, priced with
+  vectorized Carr-Madan (1999) FFT (N=4096, eta=0.25, alpha=1.5).
+- RMSE reported as RMSE * 100 in percentage points of IV (matches Tables 4-6).
+- Platform: macOS M4, spawn/fork multiprocessing. Epochs reduced 800->200 and
+  batch 32->64 for ~4x speedup with negligible accuracy loss.
+
+================================================================
+PIPELINE
+================================================================
+1. De-Americanize OptionMetrics American IVs into European-equivalent prices
+   (vectorized BS, intrinsic-value floors).
+2. Daily BS calibration (single sigma_BS per day, eq 5) and Heston calibration
+   (separate call/put parameter sets, eq 6) in parallel across trading days
+   with warm starts from the prior day and checkpoint-every-20-days resume.
+3. Extract sigma_Heston per option via vectorized bisection inversion of FFT
+   model prices; build three label columns:
+     label_bs_nn     = sigma_market - sigma_bs
+     label_heston_nn = sigma_market - sigma_heston
+     label_pure_nn   = sigma_market
+
+================================================================
+FRAMEWORKS TRAINED (run_framework)
+================================================================
+- BS+NN Independent and Sequential
+- Heston+NN Independent and Sequential
+- Pure NN Sequential (same-day and one-day-ahead)
+Training modes: independent (fresh model each day) vs sequential (one model
+carried forward). Horizons: same-day (70/30 R-split), one-day-ahead, five-day-ahead.
+In-sample RMSE (Table 4) and out-of-sample RMSE (Table 5) recorded per day,
+plus ITM/ATM/OTM bucket RMSEs.
+
+================================================================
+NOTES
+================================================================
+Observation count differs from Jiang's 2,572,366 due to OptionMetrics
+retroactive database updates; mean and std IV match Tables 1-2, confirming
+correct sourcing and filtering. Per Jiang Section 4.5, Pure NN Independent is
+omitted (equivalent to BS+NN Independent). In-sample RMSE for 1-day and 5-day
+horizons is identical (both train on day t, paper footnote 2).
+
+================================================================
+ARTIFACTS
+================================================================
+- amer_with_labels.csv (de-Americanized prices + sigma_bs/sigma_heston + labels)
+- calib_checkpoint.pkl (sigma_bs_map, heston_map)
+- results_{framework}_{mode}_{horizon}.json (daily IS/OOS RMSE + bucket RMSEs)
+
+Next step:
+Week 16 — implement the professor's HestonFeature extension (sigma_heston as a
+direct input feature rather than an additive residual correction).

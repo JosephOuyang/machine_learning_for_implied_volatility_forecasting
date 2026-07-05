@@ -1,0 +1,30 @@
+
+WEEK 6 SUMMARY — Paper-Exact Evaluation Structure
+
+Dataset Structure:
+- 1,000,000 LHS samples generated.
+- Split: 800,000 train / 200,000 validation.
+- Separate 100,000 LHS samples used as final test set.
+
+Model Results:
+
+2 Layers, 50 Nodes:
+- Training Hours: 0.5940
+- Final Test MSE (100k): 4.639221e-07
+
+3 Layers, 100 Nodes:
+- Training Hours: 0.9491
+- Final Test MSE (100k): 8.965070e-08
+
+Observations:
+- The evaluation structure now matches the research paper more accurately.
+- MSE is correctly averaged over observations.
+- Validation (200k) is used for model selection.
+- Test (100k) is completely separate from training and validation.
+- Results are consistent with earlier experiments and align with the paper's reported behavior.
+- The deeper/wider network increases computational cost but should be compared against accuracy improvements.
+
+Conclusion:
+Week 6 more accurately replicated the paper’s data generation and evaluation methodology.
+Both architectures were evaluated under identical, paper-consistent conditions.
+Further analysis can now focus on architecture scaling vs marginal MSE improvement.

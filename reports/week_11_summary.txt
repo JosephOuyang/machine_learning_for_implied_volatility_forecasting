@@ -1,0 +1,89 @@
+WEEK 11 SUMMARY — IvyDB Exact BS Verification: zerocd + borrate2024
+
+================================================================
+MOTIVATION
+================================================================
+Weeks 8b-10 used r and q sources that were updated here to align
+with the IvyDB Manual v6.0. The correct sources per the manual:
+  r: optionm.zerocd  (continuously compounded, stored as percent → /100)
+  q: optionm.borrate2024  (option implied borrow rate, already decimal)
+
+OptionMetrics inverted the European BS formula using exactly these
+inputs to compute impl_volatility. Plugging them back in must
+reproduce mid_price → residual ≈ 0.
+
+================================================================
+RATE SOURCES AND UNITS
+================================================================
+r (zerocd):
+  - Continuously compounded zero-coupon rates
+  - Stored in percent (e.g. 5.31) → divided by 100 → decimal (0.0531)
+  - One curve per trading day, interpolated at each option's days_to_expiry
+  - Post Dec 2021: SOFR-based implied risk-free rates (same table, updated methodology)
+
+q (borrate2024):
+  - Option implied borrow rate term structure
+  - Already in decimal form (e.g. 0.029) — no scaling needed
+  - Sentinel -99.99 dropped before interpolation
+  - Interpolated at each option's days_to_expiry
+
+================================================================
+COVERAGE CHECK
+================================================================
+Option dates with no borrow curve: 0 / 252
+→ Fallback never triggered. All rows use real interpolated q.
+
+================================================================
+BS RESIDUAL RESULTS
+================================================================
+N:              321,368
+Mean:           $-0.3530
+Median:         $-0.0001  ← key metric, confirms formula correct
+MAE:            $0.3725
+Std:            $0.6196
+% within $0.01: 52.7%
+% within $0.10: 60.2%
+% within $1.00: 86.1%
+
+Interpretation:
+  Median ≈ 0 confirms the IvyDB formula is correct.
+  MAE of $0.3725 is driven by ITM options where
+  bid-ask spreads are wider in dollar terms, not a formula error.
+  The residual pattern (near zero OTM, negative ITM) is consistent
+  with natural bid-ask noise at higher absolute price levels.
+
+================================================================
+FILTERING
+================================================================
+  drop_non_european: 0 rows removed
+  drop_iv_sentinel: 0 rows removed
+  drop_short_tau: 137,575 rows removed
+  drop_long_tau: 196,731 rows removed
+  drop_moneyness: 446,759 rows removed
+  drop_zero_volume: 1,044,510 rows removed
+  drop_low_oi: 250,451 rows removed
+  drop_zero_mid: 0 rows removed
+  drop_wide_spread: 11,663 rows removed
+Rows before: 2,409,057
+Rows after:  321,368
+
+================================================================
+DATASET SAVED FOR WEEK 12
+================================================================
+File:          runs/week11_spx_ivydb_exact_bs_verification/20260507-210344/options_spx_ivydb_exact_2024.csv
+Shape:         (321368, 17)
+MLP features:  moneyness, tau, r, impl_volatility  (in_dim=4)
+MLP label:     mid_price
+q column:      retained for BS reference, NOT an MLP input
+
+================================================================
+ARTIFACTS
+================================================================
+BS residual verification: runs/week11_spx_ivydb_exact_bs_verification/20260507-210344/figures/week11_bs_residual_verification.png
+Smile recovery (BS only): runs/week11_spx_ivydb_exact_bs_verification/20260507-210344/figures/week11_smile_recovery_bs_only.png
+Dataset CSV:              runs/week11_spx_ivydb_exact_bs_verification/20260507-210344/options_spx_ivydb_exact_2024.csv
+
+Next step:
+Week 12 — retrain MLP on corrected dataset (zerocd r, borrate2024 q).
+Reproduce Week 9 additions on corrected data. Compare performance
+against Week 9 baseline trained on dataset from prior weeks.

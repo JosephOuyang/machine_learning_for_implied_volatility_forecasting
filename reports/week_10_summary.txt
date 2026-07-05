@@ -1,0 +1,73 @@
+WEEK 10 SUMMARY — SPX Corrected Dataset + Three New Visualizations
+
+================================================================
+FIXES (per professor feedback)
+================================================================
+Fix 1: Risk-Free Rate
+  Old: Linear interpolation across zero curve maturities (zerocd)
+  New: CRSP Fixed-Term 10-Year Bond Index
+       Table: tfz_dly_ft | TREASNOX = 2000007 | Column: tdytm / 100
+       One rate per trading day, same for all options on that day.
+  Professor: "I look at the 10-year rate on that particular day —
+              that is the most common thing quoted as the risk-free rate."
+
+Fix 2: Black-Scholes Dividend Adjustment
+  Old: No-dividend BS formula → BS residual NOT zero
+  New: Dividend-adjusted Merton (1973):
+       d1 = [ln(S/K) + (r - q + 0.5*sigma^2)*T] / (sigma*sqrt(T))
+       C  = S*exp(-q*T)*N(d1) - K*exp(-r*T)*N(d2)
+  q source: optionm.idxdvd (same q OptionMetrics used)
+  q role:   BS benchmark ONLY — NOT an MLP input feature (in_dim=4)
+
+================================================================
+BS RESIDUAL VERIFICATION
+================================================================
+Full dataset mean residual: $78.8662  (target ≈ 0)
+Test set mean residual:     $78.6026
+
+================================================================
+TRAINING RESULTS
+================================================================
+Architecture: 3L 500N | in_dim=4
+Test MSE (scaled):  2.8000e-03
+Best Val MSE:       2.8181e-03
+Training hours:     0.8018
+Week 9 baseline:    1.1684e-03
+
+================================================================
+SMILE RECOVERY
+================================================================
+MLP mean absolute residual: $3.9246
+BS  mean absolute residual: $78.6491
+MLP beats BS: True
+
+================================================================
+MONEYNESS BUCKET RMSE (DOLLAR TERMS)
+================================================================
+         bucket     n  rmse_dollar  mae_dollar  mape_pct
+OTM (0.80–0.97) 11816     3.211241    1.533137 16.827768
+ATM (0.97–1.03) 16645     5.921837    3.449688  5.360349
+ITM (1.03–1.20)  3675    20.378849   13.764838  3.208368
+            ALL 32136     8.333535    3.924614  9.330678
+
+================================================================
+TEMPORAL SPLIT
+================================================================
+Cutoff: October 1, 2024
+Random split MSE:   2.8000e-03
+Temporal split MSE: 2.3087e-02
+Ratio: 8.25x  (Week 9 was 7.87x)
+
+================================================================
+NEW VISUALIZATIONS
+================================================================
+1. 2D RMSE Heatmap (Moneyness x Tau):   runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/figures/week10_rmse_heatmap_2d.png
+2. Implied Vol Surface (Market vs MLP): runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/figures/week10_implied_vol_surface.png
+3. Partial Dependence (MLP vs BS):      runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/figures/week10_partial_dependence.png
+
+Artifacts:
+- Corrected dataset:   runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/options_spx_corrected_2024.csv
+- BS verification:     runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/figures/week10_bs_benchmark_10y_treasury.png
+- Smile recovery:      runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/figures/week10_smile_recovery.png
+- Bucket RMSE bar:     runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/figures/week10_bucket_rmse_bar.png
+- Temporal comparison: runs/week10_spx_fixed_rate_dividend_adjusted/20260424-060500/week10_temporal_comparison.csv

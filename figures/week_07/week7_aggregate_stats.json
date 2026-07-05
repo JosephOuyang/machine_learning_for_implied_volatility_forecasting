@@ -1,0 +1,30 @@
+{
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "per_seed": [
+    {
+      "seed": 42,
+      "test_mse": 9.792605843358615e-08,
+      "training_hours": 0.47197717038722214
+    },
+    {
+      "seed": 123,
+      "test_mse": 8.450575883216516e-08,
+      "training_hours": 0.46562883057944454
+    },
+    {
+      "seed": 456,
+      "test_mse": 1.0741879721535951e-07,
+      "training_hours": 0.4760125552011111
+    }
+  ],
+  "mean_test_mse": 9.66168714937036e-08,
+  "std_test_mse": 1.1512484954174909e-08,
+  "mean_train_hours": 0.47120618538925924,
+  "std_train_hours": 0.005234620106078743,
+  "paper_target_mean": 2.76e-06,
+  "paper_target_std": 6.1e-07
+}

@@ -1,0 +1,77 @@
+WEEK 14 SUMMARY — S&P 100 Options Dataset: Jiang et al. (2026) Replication
+
+================================================================
+DATA SOURCES
+================================================================
+European (XEO):    optionm.opprcd{YYYY}  (secid = 112878)
+American (OEX):    optionm.opprcd{YYYY}  (secid = 109764)
+Underlying price:  optionm.secprd
+Risk-free rate:    optionm.zerocd (percent → /100, interpolated at days_to_expiry)
+Dividend yield:    optionm.idxdvd (/100, interpolated at days_to_expiry)
+Years pulled:      2016–2023 (8 annual tables unioned)
+
+================================================================
+SAMPLE SPECIFICATIONS (per Jiang Section 2)
+================================================================
+Date range:              2016-01-04 to 2023-08-31
+Moneyness (S/K):         [0.8, 1.6]
+Tau (calendar days):     [20, 1094]
+Short-term maturity:     [20, 240) days
+Long-term maturity:      [240, 1094] days
+ATM band:                [0.97, 1.03] for both calls and puts
+Volume filter:           NONE — all quoted options included per Jiang Section 2
+
+================================================================
+MONEYNESS CLASSIFICATION (per Jiang Section 2)
+================================================================
+ATM:       moneyness in [0.97, 1.03] — both calls and puts
+Call ITM:  moneyness > 1.03    |   Call OTM: moneyness < 0.97
+Put  ITM:  moneyness < 0.97    |   Put  OTM: moneyness > 1.03
+
+================================================================
+DATASET COUNTS
+================================================================
+European (XEO):     3,095,427 observations
+  Calls:            1,536,423
+  Puts:             1,559,004
+  Trading days:         1,926
+  Avg/day:               1607
+
+American (OEX):     2,489,560 observations
+  Calls:            1,221,776
+  Puts:             1,267,784
+  Trading days:         1,926
+  Avg/day:               1293
+
+Jiang paper targets:
+  European:      2,321,169 total (avg 1,205/day)
+  American:      2,572,366 total (avg 1,338/day)
+
+Note: Count discrepancy versus Jiang cannot be fully explained
+from their stated methodology alone. All disclosed filters have
+been implemented. Mean and std IV statistics match Jiang's
+published Tables 1 and 2 closely, confirming the dataset is
+correctly sourced and filtered. Discrepancy to be raised with
+Professor Schafer for clarification with the authors.
+
+================================================================
+DATA QUALITY CHECKS
+================================================================
+r range (decimal):  0.0007 to 0.0572
+  Consistent with 2016-2023 Fed funds cycle (near-zero to ~5.75%)
+q range (decimal):  0.0000 to 0.1932
+  Consistent with S&P 100 dividend yield (~1.5-2.5%)
+IV skew confirmed:  OTM puts > ATM > OTM calls across all panels
+American IV > European IV confirmed (early exercise premium)
+Short-term dispersion > long-term dispersion confirmed
+
+================================================================
+ARTIFACTS
+================================================================
+European CSV:          runs/week14_oex_jiang_dataset_replication/20260521-235712/oex_european_jiang_2016_2023.csv
+American CSV:          runs/week14_oex_jiang_dataset_replication/20260521-235712/oex_american_jiang_2016_2023.csv
+Table 1 (European):    runs/week14_oex_jiang_dataset_replication/20260521-235712/table1_european_summary.csv
+Table 2 (American):    runs/week14_oex_jiang_dataset_replication/20260521-235712/table2_american_summary.csv
+Figure 1 (histograms): runs/week14_oex_jiang_dataset_replication/20260521-235712/figures/figure1_moneyness_tau_histograms.png
+Figure 2 (daily obs):  runs/week14_oex_jiang_dataset_replication/20260521-235712/figures/figure2_daily_observation_counts.png
+Diagnostic IV plot:    runs/week14_oex_jiang_dataset_replication/20260521-235712/figures/diagnostic_iv_by_moneyness_bucket.png

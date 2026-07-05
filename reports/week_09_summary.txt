@@ -1,0 +1,67 @@
+WEEK 9 SUMMARY — MLP Training on SPX European Options (Real Data, 2024)
+
+Dataset: Week 8b — SPX European calls, 2024
+Total rows: 321,368
+Features:  moneyness, tau, r, impl_volatility (4 inputs)
+Label:     mid_price (observed SPX European call price in dollars)
+Note:      r stored in decimal form (fixed in Week 8b)
+
+Split Structure (mirrors Weeks 6-7):
+- Separate test set: 32,136 rows (10% of total)
+- Train: 231,385 rows (80% of remainder)
+- Val:   57,847 rows (20% of remainder)
+- Best model selected by validation MSE
+- Test MSE computed once on separate held-out test set
+
+Training Procedure (identical to Weeks 6-7):
+- LR=1e-5, Batch=64, Epochs=200, Adam eps=1e-7, ReLU, MSE
+
+Architecture Sweep (designed to study complexity effect):
+  2L 50N  — baseline, simplest model
+  2L 500N — wide, isolates width effect vs baseline
+  3L 250N — medium depth and width
+  3L 500N — maximum capacity, tests saturation
+
+        tag  test_mse  best_val_mse  training_hours  param_count
+ 2L_50N_spx  0.001820      0.001807        0.131574         2851
+2L_500N_spx  0.001382      0.001367        0.463720       253501
+3L_250N_spx  0.001343      0.001330        0.332603       127001
+3L_500N_spx  0.001168      0.001152        0.820044       504001
+
+Best Model: 3L_500N_spx
+- Test MSE (scaled):  1.1684e-03
+- Best Val MSE:       1.1523e-03
+- Training hours:     0.8200
+
+================================================================
+ADDITION 1: SMILE RECOVERY
+================================================================
+Mean absolute MLP residual: $2.5039
+Mean absolute BS  residual: $3.7810
+MLP beats BS: True
+
+================================================================
+ADDITION 2: MONEYNESS BUCKET RMSE (DOLLAR TERMS)
+================================================================
+         bucket     n  rmse_dollar  mae_dollar  mape_pct
+OTM (0.80–0.97) 11816     1.746389    0.966270 16.103910
+ATM (0.97–1.03) 16645     3.661135    2.222321  3.712520
+ITM (1.03–1.20)  3675    13.524120    8.723080  2.127953
+            ALL 32136     5.383332    2.503899  8.087470
+
+================================================================
+ADDITION 3: TEMPORAL SPLIT (REGIME GENERALIZATION)
+================================================================
+Cutoff: October 1, 2024
+Train: Jan-Sep (r ≈ 0.0525-0.055) | Test: Oct-Dec (r ≈ 0.047-0.050)
+Random split MSE:   1.1684e-03
+Temporal split MSE: 9.1981e-03
+Ratio:              7.87x
+
+Artifacts:
+- Results CSV:              runs/week9_mlp_spx_european_2024/20260416-232617/week9_results_summary.csv
+- Complexity vs MSE plot:   runs/week9_mlp_spx_european_2024/20260416-232617/figures/week9_complexity_vs_mse.png
+- Smile recovery plot:      runs/week9_mlp_spx_european_2024/20260416-232617/figures/week9_smile_recovery.png
+- Bucket RMSE CSV:          runs/week9_mlp_spx_european_2024/20260416-232617/week9_bucket_rmse.csv
+- Bucket RMSE bar chart:    runs/week9_mlp_spx_european_2024/20260416-232617/figures/week9_bucket_rmse_bar.png
+- Temporal comparison CSV:  runs/week9_mlp_spx_european_2024/20260416-232617/week9_temporal_comparison.csv

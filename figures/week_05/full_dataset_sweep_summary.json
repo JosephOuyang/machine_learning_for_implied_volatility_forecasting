@@ -1,0 +1,37 @@
+{
+  "lr": 1e-05,
+  "batch": 64,
+  "epochs": 200,
+  "device": "cpu",
+  "torch_num_threads": 1,
+  "rows": [
+    {
+      "label": "2 layers 50 nodes",
+      "layers": 2,
+      "nodes": 50,
+      "train_hours": 1.3205682989730558,
+      "test_mse": 7.129661294948164e-07
+    },
+    {
+      "label": "3 layers 50 nodes",
+      "layers": 3,
+      "nodes": 50,
+      "train_hours": 1.6434833598877776,
+      "test_mse": 5.869988206632116e-07
+    },
+    {
+      "label": "2 layers 100 nodes",
+      "layers": 2,
+      "nodes": 100,
+      "train_hours": 1.6385423847347222,
+      "test_mse": 1.6353490395431436e-07
+    },
+    {
+      "label": "3 layers 100 nodes",
+      "layers": 3,
+      "nodes": 100,
+      "train_hours": 1.609883541985,
+      "test_mse": 1.6279119105320206e-07
+    }
+  ]
+}
