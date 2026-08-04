@@ -1,0 +1,10 @@
+Comparison D: final MSEs and signal captured (floor MSE = 0.08333)
+signal_floor_minus_test > 0 means the model beat blind mean-guessing.
+
+   approach window final_train_mse final_test_mse signal_floor_minus_test
+     init-1  w0400         0.06697        0.06714                 0.01619
+     init-1  w2000         0.06893        0.06918                 0.01416
+   init-100  w0400         0.08038        0.08041                 0.00292
+   init-100  w2000         0.08087        0.08110                 0.00224
+log-returns  w0400         0.05465        0.05755                 0.02578
+log-returns  w2000         0.04312        0.06152                 0.02181
