@@ -1,0 +1,48 @@
+=== Test RMSE per parameter, original units (all runs) ===
+
+      dt     init complexity window kappa_rmse theta_rmse xi_rmse rho_rmse v0_rmse
+sqret/dt   init-1    shallow  w0504     0.5523     0.0979  0.1066   0.2505  0.0547
+sqret/dt   init-1        cnn  w0504     0.5502     0.1004  0.1137   0.2391  0.0638
+sqret/dt   init-1    complex  w0504     0.5542     0.1013  0.1090   0.2503  0.0607
+   sqret   init-1    shallow  w0504     0.5552     0.0985  0.1205   0.2637  0.0558
+sqret/dt init-100        cnn  w0504     0.5544     0.1037  0.1225   0.2377  0.0740
+   sqret   init-1    complex  w0504     0.5581     0.1041  0.1269   0.2634  0.0598
+sqret/dt   init-1    shallow  w0252     0.5608     0.1139  0.1262   0.2613  0.0555
+sqret/dt init-100    shallow  w0504     0.5614     0.0999  0.1291   0.2742  0.0605
+sqret/dt   init-1        cnn  w0252     0.5605     0.1144  0.1276   0.2555  0.0638
+sqret/dt   init-1    complex  w0252     0.5620     0.1149  0.1273   0.2615  0.0609
+   sqret   init-1    shallow  w0252     0.5612     0.1143  0.1304   0.2657  0.0560
+sqret/dt init-100        cnn  w0252     0.5628     0.1166  0.1311   0.2554  0.0782
+   sqret   init-1    complex  w0252     0.5650     0.1164  0.1336   0.2670  0.0701
+sqret/dt init-100    shallow  w0252     0.5660     0.1165  0.1400   0.2741  0.0604
+sqret/dt init-100    complex  w0504     0.5694     0.1193  0.1250   0.2737  0.0932
+sqret/dt init-100    complex  w0252     0.5676     0.1203  0.1368   0.2709  0.0888
+   sqret init-100    complex  w0504     0.5773     0.1288  0.1436   0.2741  0.1213
+   sqret init-100    shallow  w0252     0.5775     0.1443  0.1444   0.2742  0.1242
+   sqret init-100    complex  w0252     0.5775     0.1443  0.1444   0.2742  0.1299
+   sqret init-100    shallow  w0504     0.5775     0.1443  0.1444   0.2742  0.1299
+
+
+=== Variance explained per parameter (1 - (rmse/floor)^2), ranked by mean ===
+
+      dt     init complexity window kappa_VE theta_VE xi_VE rho_VE v0_VE mean_VE
+sqret/dt   init-1    shallow  w0504     8.5%    54.0% 45.5%  16.6% 82.3%   41.4%
+sqret/dt   init-1        cnn  w0504     9.2%    51.6% 38.0%  24.0% 75.9%   39.7%
+sqret/dt   init-1    complex  w0504     7.8%    50.8% 43.0%  16.7% 78.2%   39.3%
+   sqret   init-1    shallow  w0504     7.5%    53.5% 30.2%   7.6% 81.5%   36.1%
+sqret/dt init-100        cnn  w0504     7.8%    48.4% 27.9%  24.9% 67.5%   35.3%
+   sqret   init-1    complex  w0504     6.6%    48.0% 22.7%   7.7% 78.8%   32.8%
+sqret/dt   init-1    shallow  w0252     5.6%    37.8% 23.5%   9.2% 81.8%   31.6%
+sqret/dt init-100    shallow  w0504     5.5%    52.1% 20.0%   0.0% 78.3%   31.2%
+sqret/dt   init-1        cnn  w0252     5.8%    37.2% 21.9%  13.2% 75.9%   30.8%
+sqret/dt   init-1    complex  w0252     5.2%    36.6% 22.2%   9.0% 78.0%   30.2%
+   sqret   init-1    shallow  w0252     5.5%    37.3% 18.4%   6.1% 81.4%   29.8%
+sqret/dt init-100        cnn  w0252     5.0%    34.7% 17.5%  13.3% 63.8%   26.9%
+   sqret   init-1    complex  w0252     4.2%    35.0% 14.3%   5.2% 70.9%   25.9%
+sqret/dt init-100    shallow  w0252     3.9%    34.9%  5.9%   0.1% 78.4%   24.6%
+sqret/dt init-100    complex  w0504     2.7%    31.6% 25.1%   0.4% 48.5%   21.7%
+sqret/dt init-100    complex  w0252     3.3%    30.6% 10.1%   2.4% 53.3%   20.0%
+   sqret init-100    complex  w0504     0.0%    20.4%  1.1%   0.1% 12.8%    6.9%
+   sqret init-100    shallow  w0252    -0.1%     0.1% -0.0%   0.0%  8.6%    1.7%
+   sqret init-100    complex  w0252    -0.0%    -0.0% -0.0%   0.0%  0.0%   -0.0%
+   sqret init-100    shallow  w0504    -0.1%    -0.0% -0.0%   0.0%  0.0%   -0.0%
