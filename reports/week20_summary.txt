@@ -1,0 +1,41 @@
+WEEK 20 SUMMARY — Heston-Autoencoder Feature Engineering
+
+MOTIVATION
+Heston calibration suffers from nonuniqueness, nonidentifiability, and a
+degenerate objective surface, undermining trust in sigma_heston despite it
+improving forecasting RMSE. Goal: replace calibration with a trained
+autoencoder that compresses option surfaces into a reliable, low-dimensional
+feature set.
+
+FIXED GRID (Cells 20.0b-20.2d)
+Designed a 391-point fixed (moneyness, tau) grid shared by synthetic and real
+surfaces. Empirically swept bounds; tau drove extrapolation risk more than
+moneyness, leading to asymmetric bounds (moneyness ~[0.89,1.32], tau
+~[30,472] days), ~3.6% median extrapolation. r_fixed=0.0163, q_fixed=0.0162
+set from Jiang's real data.
+
+SYNTHETIC DATASET + AUTOENCODERS (Jobs 16-18)
+LHS-sampled ~1,000 Heston parameter sets, simulated (S,v) paths, priced
+surfaces via FFT on the fixed grid -- millions of vectors with known ground
+truth. Trained two five-layer autoencoders (391->256->6->256->391), one per
+option type, compressing each surface to 6 latent features.
+
+DEPLOYMENT (Job 19)
+For each real Jiang trading day/type, interpolated real quotes (price_deamer,
+scaled by S) onto the fixed grid and encoded through the trained
+autoencoders -> 6 features per (day, type). ~86% of days needed some
+fallback-filled grid points (avg ~5% of the vector); 0.16% of (day, type)
+combos skipped for insufficient quotes.
+
+COMPARISON EXPERIMENT (Job 20)
+Two frameworks, identical architecture/hyperparameters to Week 19's complex
+HestonFeature run, differing only in feature set:
+  AEOnly:      moneyness, tau, ae_z0..ae_z5 (no sigma_heston)
+  HestonPlusAE: moneyness, tau, sigma_heston, ae_z0..ae_z5
+
+RESULT
+HestonPlusAE mean OOS RMSE: 2.3% vs. HestonFeature baseline: 2.4% (~4%
+relative reduction). Paired day-by-day and outlier-trim analysis run to
+check whether this is broad-based or outlier-driven, given the small
+absolute gap. Both runs used a single fixed seed, so this alone cannot
+confirm the effect would replicate under a different seed.
