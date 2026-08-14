@@ -1,0 +1,2 @@
+grid_size_target,grid_size_final,n_moneyness_axis,n_tau_axis,p25_daily_calls,p25_daily_puts,reliable_coverage_floor,moneyness_min,moneyness_max,tau_days_min,tau_days_max,placement_method
+390,391,23,17,456.0,457.0,456,0.824,1.525651515151515,20.99999999999998,977.0000000000001,"marginal quantiles (2%-98%), pooled across all days/years/C+P"
