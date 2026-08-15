@@ -1,0 +1,31 @@
+WEEK 21 -- CNN EXPERIMENTS: BRIEF SUMMARY
+============================================
+
+WHAT WAS IMPLEMENTED
+---------------------
+CNN: 2 input channels (price; annualized daily variance r_t^2/dt,
+dt=1/252 matching the Euler discretization step). kernel_size=3,
+base_channels=32, 6 dilated conv layers (dilation doubling per layer),
+global average pooling -> 6-dim latent -> dense head -> 5 params.
+Also tested: dense-model depth (shallow vs +6 layers/side) and the
+dt-normalized squared-log-return feature.
+
+RESULTS
+-------
+Added depth to the dense MLP did not help -- slightly hurt. The best
+single change was to the INPUT (dividing squared returns by dt to
+annualize), not the architecture -- improved theta and v0. Kappa
+remains unlearned under every setting tried. The CNN's standout result:
+RHO achieved its lowest RMSE under any framework tested -- the CNN
+specifically helps this parameter.
+
+NEXT STEPS (3, from this meeting)
+------------------------------------
+1. Vary kernel_size (try larger, ~10) -- current size-3 window is close
+   to a single observation; may miss time-varying structure.
+2. Explore alternative pooling, or replacing pooling with feed-forward
+   compression -- global average pooling may over-dilute signal.
+3. Implement short-term vs long-term rolling realized-variance channels
+   (e.g. RV5, RV60) to expose volatility bursts and reversion speed
+   (the RV_short-vs-RV_long gap closing over time). Confirmed
+   computable identically on real market data.
