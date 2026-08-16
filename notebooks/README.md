@@ -1,6 +1,6 @@
 # Notebooks
 
-Nine notebooks, organized **by topic** (research stage), split from the
+Ten notebooks, organized **by topic** (research stage), split from the
 original cumulative `options_pricing_main.ipynb` for easier navigation.
 
 | Notebook | Topic | Weeks |
@@ -14,6 +14,7 @@ original cumulative `options_pricing_main.ipynb` for easier navigation.
 | `07_heston_feature_extension.ipynb` | HestonFeature extension (σ_Heston as direct MLP input) + framework battery start | 16–17 |
 | `08_week17_framework_comparison.ipynb` | Framework comparison, RMSE tables, 60-day MA OOS | 17 |
 | `09_week18_19_dropout_and_complexity_analysis.ipynb` | Overfitting study: baseline vs simpler architecture vs dropout, extended to increased model complexity (128→64→32→16) paired with dropout | 18–19 |
+| `10_week20_21_heston_autoencoder_and_cnn.ipynb` | Heston-autoencoder feature engineering (fixed grid, synthetic autoencoder, deployment, AEOnly/HestonPlusAE comparison) + CNN-based parameter estimation experiments | 20–21 |
 
 ## Running a notebook
 

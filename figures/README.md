@@ -1,7 +1,7 @@
 # Figures
 
 Plots, tables, and visualizations from the research, organized **by week**
-(`week_02` … `week_19`). Weeks are kept as the unit here because some weeks
+(`week_02` … `week_21`). Weeks are kept as the unit here because some weeks
 span more than one notebook; the mapping below connects weeks to the
 topic-organized notebooks.
 
@@ -22,9 +22,15 @@ Folders are zero-padded (`week_02`, not `week2`) so they sort in order.
 | `week_16` | `07_heston_feature_extension` |
 | `week_17` | `08_week17_framework_comparison` |
 | `week_18`, `week_19` | `09_week18_19_dropout_and_complexity_analysis` |
+| `week_20`, `week_21` | `10_week20_21_heston_autoencoder_and_cnn` |
 
 > Weeks 10–14 contain work for both the SPX and S&P 100 pathways; see the
 > individual filenames (e.g. `*_spx_*`) to distinguish them.
 > Week 15 has no generated figures; its folder is a placeholder.
 > Week 18–19 figures are extracted from the embedded outputs of
 > `09_week18_19_dropout_and_complexity_analysis.ipynb`.
+> Week 20 figures cover the fixed moneyness×tau grid design and the
+> Heston-autoencoder feature deployment (Cells 20.1–20.4); week 21 figures
+> cover the CNN parameter-estimation experiments (Cells 21.3–21.11). Both are
+> extracted from the embedded outputs of
+> `10_week20_21_heston_autoencoder_and_cnn.ipynb`.

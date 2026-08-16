@@ -69,6 +69,19 @@ Diagnosed the in-sample / out-of-sample gap across all frameworks and tested reg
 - Horizon-pair percent-difference analysis (same-day → 1-day, → 5-day) by call/put × moneyness, baseline vs simpler architecture
 - **Task 4 (Week 19) — Increased complexity + dropout**: We built a much larger 128→64→32→16 architecture swept at p ∈ {0.0, 0.02, 0.4}. Complexity alone (p=0.0) made overfitting *worse* than the Week 18 baseline in every framework (overfit ratio +35 pp on average). Complexity + heavy dropout (p=0.4) pushed the overfit ratio well below Week 18's best-dropout result, but p=0.4 is also the *worst* absolute OOS RMSE of the three levels tested; in every config, the p that actually minimizes OOS RMSE is the no-dropout anchor itself in 4/6 configs and light p=0.02 dropout in the other 2, and on that correct pick Week 19's best achievable OOS RMSE beats Week 18's own best-dropout result in all 6 configs. No single p wins on both metrics for the same config. See `reports/week_19_summary.txt` for the full breakdown.
 
+### Stage 8 — Heston-Autoencoder Feature Engineering *(Week 20)*
+Heston calibration suffers from nonuniqueness, nonidentifiability, and a degenerate objective surface, undermining trust in `sigma_heston` despite it improving forecasting RMSE. This stage replaces calibration with a trained autoencoder that compresses option surfaces into a reliable, low-dimensional feature set:
+- **Fixed grid**: designed a 391-point fixed (moneyness, τ) grid shared by synthetic and real surfaces; empirically swept bounds and found τ drove extrapolation risk more than moneyness, leading to asymmetric bounds (moneyness ≈ [0.89, 1.32], τ ≈ [30, 472] days), ~3.6% median extrapolation
+- **Synthetic dataset + autoencoders**: LHS-sampled ~1,000 Heston parameter sets, simulated `(S, v)` paths, priced surfaces via FFT on the fixed grid; trained two five-layer autoencoders (391→256→6→256→391), one per option type, compressing each surface to 6 latent features
+- **Deployment**: for each real Jiang trading day/type, interpolated real quotes onto the fixed grid and encoded through the trained autoencoders → 6 features per (day, type); ~86% of days needed some fallback-filled grid points, 0.16% of (day, type) combos skipped for insufficient quotes
+- **Comparison**: `AEOnly` (moneyness, τ, 6 AE latents) vs `HestonPlusAE` (adds `sigma_heston`) against the Week 19 `HestonFeature` baseline, same architecture/hyperparameters. `HestonPlusAE` mean OOS RMSE 2.3% vs. baseline 2.4% (~4% relative reduction); paired day-by-day and outlier-trim checks suggest the gap is broad-based rather than outlier-driven, though both runs used a single fixed seed, so replication under a different seed is unconfirmed. See `reports/week_20_summary.txt`.
+
+### Stage 9 — CNN-Based Parameter Estimation *(Week 21)*
+Tested a CNN as an alternative to the dense-MLP Heston-parameter estimator, taking raw price and variance paths as input channels rather than hand-engineered features:
+- **Architecture**: 2 input channels (price; annualized daily variance `r_t² / dt`, `dt = 1/252` matching the Euler discretization step), `kernel_size=3`, `base_channels=32`, 6 dilated conv layers (dilation doubling per layer), global average pooling → 6-dim latent → dense head → 5 Heston parameters. Also tested dense-model depth (shallow vs. +6 layers/side) and the dt-normalized squared-log-return feature
+- **Results**: added depth to the dense MLP did not help — slightly hurt. The best single change was to the *input* (dividing squared returns by `dt` to annualize), not the architecture — improved θ and v₀ estimates. κ remains unlearned under every setting tried. The CNN's standout result: ρ achieved its lowest RMSE under any framework tested — the CNN specifically helps this parameter
+- **Next steps**: (1) vary `kernel_size` (try larger, ~10) since the current size-3 window is close to a single observation and may miss time-varying structure; (2) explore alternative pooling or feed-forward compression, since global average pooling may over-dilute signal; (3) implement short-term vs. long-term rolling realized-variance channels (e.g. RV5, RV60) to expose volatility bursts and reversion speed. See `reports/week_21_summary.txt`.
+
 ---
 
 ## Architecture
@@ -87,6 +100,17 @@ architecture**, swept at p ∈ {0.0, 0.02, 0.4}.
 **Synthetic / transformed-IV work (Stages 1–2).** Separate from the Jiang
 architecture: MLPs from the Della Corte grid (2–3 layers × {50–500} nodes),
 ReLU, Glorot/Xavier init, Adam (ε = 10⁻⁷), lr = 10⁻⁵, batch 64.
+
+**Heston-autoencoder feature engineering (Stage 8).** Two five-layer
+autoencoders (391 → 256 → 6 → 256 → 391, one per option type) compress
+fixed-grid option-price surfaces into 6 latent features, which feed the same
+Jiang-style downstream NN (`AEOnly` / `HestonPlusAE`) used in Stages 4–7.
+
+**CNN parameter estimator (Stage 9).** A dilated 1-D CNN over raw
+`(price, annualized variance)` paths: `kernel_size=3`, `base_channels=32`, 6
+dilated conv layers (dilation doubling per layer), global average pooling to
+a 6-dim latent, then a dense head to the 5 Heston parameters — replacing the
+grid-feature MLP input with a direct path-based one.
 
 ---
 
@@ -128,8 +152,8 @@ Developed and trained on **Google Colab** with Google Drive persistence. Core de
 ```
 machine_learning_for_implied_volatility_forecasting/
 ├── shared/      # setup module imported by every notebook (setup.py)
-├── notebooks/   # 9 notebooks, organized by topic — see notebooks/README.md
-├── figures/     # plots and tables, by week (week_02 … week_19)
+├── notebooks/   # 10 notebooks, organized by topic — see notebooks/README.md
+├── figures/     # plots and tables, by week (week_02 … week_21)
 ├── reports/     # weekly summaries + mid-semester progress report
 ├── sources/     # reference papers
 ├── .gitignore · LICENSE · README.md
