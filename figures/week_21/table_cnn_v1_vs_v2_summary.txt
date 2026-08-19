@@ -1,0 +1,33 @@
+=== CNN v1 vs v2: test RMSE per parameter, original units ===
+
+                version     init window kappa_rmse theta_rmse xi_rmse rho_rmse v0_rmse
+v1 (avg-pool, 6 layers)   init-1  w0252     0.5605     0.1144  0.1276   0.2555  0.0638
+ v2 (avg+max, 9 layers)   init-1  w0252     0.5621     0.1164  0.1285   0.2548  0.0747
+v1 (avg-pool, 6 layers)   init-1  w0504     0.5502     0.1004  0.1137   0.2391  0.0638
+ v2 (avg+max, 9 layers)   init-1  w0504     0.5537     0.1041  0.1142   0.2404  0.0840
+v1 (avg-pool, 6 layers) init-100  w0252     0.5628     0.1166  0.1311   0.2554  0.0782
+ v2 (avg+max, 9 layers) init-100  w0252     0.5650     0.1181  0.1326   0.2566  0.0830
+v1 (avg-pool, 6 layers) init-100  w0504     0.5544     0.1037  0.1225   0.2377  0.0740
+ v2 (avg+max, 9 layers) init-100  w0504     0.5579     0.1129  0.1242   0.2388  0.0947
+
+
+=== CNN v1 vs v2: variance explained per parameter (1 - (rmse/floor)^2) ===
+
+                version     init window kappa_VE theta_VE xi_VE rho_VE v0_VE mean_VE
+v1 (avg-pool, 6 layers)   init-1  w0252     5.8%    37.2% 21.9%  13.2% 75.9%   30.8%
+ v2 (avg+max, 9 layers)   init-1  w0252     5.2%    34.9% 20.7%  13.7% 66.9%   28.3%
+v1 (avg-pool, 6 layers)   init-1  w0504     9.2%    51.6% 38.0%  24.0% 75.9%   39.7%
+ v2 (avg+max, 9 layers)   init-1  w0504     8.0%    48.0% 37.4%  23.2% 58.2%   35.0%
+v1 (avg-pool, 6 layers) init-100  w0252     5.0%    34.7% 17.5%  13.3% 63.8%   26.9%
+ v2 (avg+max, 9 layers) init-100  w0252     4.2%    33.0% 15.7%  12.5% 59.2%   24.9%
+v1 (avg-pool, 6 layers) init-100  w0504     7.8%    48.4% 27.9%  24.9% 67.5%   35.3%
+ v2 (avg+max, 9 layers) init-100  w0504     6.6%    38.8% 25.9%  24.2% 46.9%   28.5%
+
+
+=== v2 minus v1: change in variance explained (positive = v2 improved) ===
+
+    init window kappa_VE_delta theta_VE_delta xi_VE_delta rho_VE_delta v0_VE_delta
+init-100  w0252          -0.7%          -1.7%       -1.9%        -0.8%       -4.6%
+init-100  w0504          -1.2%          -9.6%       -2.0%        -0.7%      -20.6%
+  init-1  w0252          -0.5%          -2.3%       -1.1%        +0.4%       -9.0%
+  init-1  w0504          -1.2%          -3.6%       -0.6%        -0.8%      -17.6%
