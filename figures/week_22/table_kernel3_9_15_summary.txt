@@ -1,0 +1,27 @@
+=== Kernel 3 vs 9 vs 15: test RMSE per parameter, original units ===
+
+            kernel window kappa_rmse theta_rmse xi_rmse rho_rmse v0_rmse
+kernel=15 (Job 49)  w0252     0.5600     0.1137  0.1239   0.2548  0.0558
+ kernel=3 (Job 44)  w0252     0.5605     0.1144  0.1276   0.2555  0.0638
+ kernel=9 (Job 48)  w0252     0.5601     0.1139  0.1251   0.2548  0.0603
+kernel=15 (Job 49)  w0504     0.5458     0.0966  0.1011   0.2348  0.0541
+ kernel=3 (Job 44)  w0504     0.5502     0.1004  0.1137   0.2391  0.0638
+ kernel=9 (Job 48)  w0504     0.5470     0.0994  0.1072   0.2356  0.0646
+
+
+=== Kernel 3 vs 9 vs 15: variance explained per parameter ===
+
+            kernel window kappa_VE theta_VE xi_VE rho_VE v0_VE mean_VE
+kernel=15 (Job 49)  w0252     5.9%    38.0% 26.3%  13.7% 81.6%   33.1%
+ kernel=3 (Job 44)  w0252     5.8%    37.2% 21.9%  13.2% 75.9%   30.8%
+ kernel=9 (Job 48)  w0252     5.9%    37.8% 24.9%  13.7% 78.5%   32.1%
+kernel=15 (Job 49)  w0504    10.6%    55.2% 50.9%  26.7% 82.7%   45.2%
+ kernel=3 (Job 44)  w0504     9.2%    51.6% 38.0%  24.0% 75.9%   39.7%
+ kernel=9 (Job 48)  w0504    10.2%    52.6% 44.8%  26.2% 75.3%   41.8%
+
+
+=== Deltas: kernel=9 minus kernel=3, and kernel=15 minus kernel=9 (positive = further increase helped) ===
+
+window kappa_VE_delta_9v3 kappa_VE_delta_15v9 theta_VE_delta_9v3 theta_VE_delta_15v9 xi_VE_delta_9v3 xi_VE_delta_15v9 rho_VE_delta_9v3 rho_VE_delta_15v9 v0_VE_delta_9v3 v0_VE_delta_15v9
+ w0252              +0.2%               +0.0%              +0.5%               +0.2%           +3.0%            +1.4%            +0.5%             +0.0%           +2.6%            +3.1%
+ w0504              +1.0%               +0.4%              +1.0%               +2.6%           +6.8%            +6.1%            +2.2%             +0.5%           -0.6%            +7.4%
