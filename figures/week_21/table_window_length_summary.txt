@@ -1,0 +1,20 @@
+=== Window length: test RMSE per parameter, original units ===
+
+            window kappa_rmse theta_rmse xi_rmse rho_rmse v0_rmse
+ 252 days (Job 44)     0.5605     0.1144  0.1276   0.2555  0.0638
+ 504 days (Job 44)     0.5502     0.1004  0.1137   0.2391  0.0638
+1008 days (Job 47)     0.5212     0.0834  0.0887   0.2194  0.0609
+
+
+=== Window length: variance explained per parameter ===
+
+            window kappa_VE theta_VE xi_VE rho_VE v0_VE mean_VE
+ 252 days (Job 44)     5.8%    37.2% 21.9%  13.2% 75.9%   30.8%
+ 504 days (Job 44)     9.2%    51.6% 38.0%  24.0% 75.9%   39.7%
+1008 days (Job 47)    18.5%    66.6% 62.3%  36.0% 78.0%   52.3%
+
+
+=== 1008 days minus 504 days: change in variance explained (positive = longer window helped further) ===
+
+kappa_VE_delta theta_VE_delta xi_VE_delta rho_VE_delta v0_VE_delta
+         +9.3%         +15.0%      +24.3%       +12.0%       +2.2%
